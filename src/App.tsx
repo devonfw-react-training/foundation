@@ -1,18 +1,10 @@
-import { Component } from "react";
-import { Title } from "./App.css";
+import { BookDetails } from "./book/components/BookDetails/BookDetails";
+import { Container } from "./App.css";
 
-interface State {
-  title: string;
-}
-
-interface Props {}
-
-class App extends Component<Props, State> {
-  state = { title: "Hello World!" };
-
-  render() {
-    return <Title>{this.state.title}</Title>;
-  }
-}
+const App = () => (
+  <Container>
+    <BookDetails />
+  </Container>
+);
 
 export default App;

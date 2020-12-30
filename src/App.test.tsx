@@ -1,8 +1,11 @@
-import { render, screen } from "@testing-library/react";
+import ReactDOM from "react-dom";
 import App from "./App";
 
-test("renders title", () => {
-  render(<App />);
-  const titleElement = screen.getByText(/Hello World!/i);
-  expect(titleElement).toBeInTheDocument();
+it("renders without crashing", () => {
+  // given
+  const div = document.createElement("div");
+  // when
+  ReactDOM.render(<App />, div);
+  // then no errors thrown
+  ReactDOM.unmountComponentAtNode(div);
 });
