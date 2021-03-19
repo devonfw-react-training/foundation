@@ -1,9 +1,9 @@
-import { BookDetails } from "./book/components/BookDetails/BookDetails";
+import { BookOverview } from "./book/components/BookOverview/BookOverview";
 import { Container } from "./App.css";
 
 const App = () => (
   <Container>
-    <BookDetails />
+    <BookOverview />
   </Container>
 );
 
