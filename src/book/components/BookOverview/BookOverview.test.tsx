@@ -34,7 +34,7 @@ describe("Book Overview Component", () => {
     expect(johnExamleRow).toBeInTheDocument();
     expect(joeSmithRow).toBeInTheDocument();
   });
-  it("selects a table row upon its click", () => {
+  it("renders details upon click on the row", () => {
     // given
     render(<BookOverview />);
     // when
@@ -42,5 +42,21 @@ describe("Book Overview Component", () => {
     row && fireEvent.click(row);
     // then
     expect(screen.getByText(/Authors:/i)).toBeInTheDocument();
+  });
+
+  it("updates a book row upon changes done in the details", () => {
+    // given
+    render(<BookOverview />);
+    // when
+    const row = screen.getByText(/John Example/i).closest("tr");
+    row && fireEvent.click(row);
+    const newAuthor = "New Author";
+    const authors = screen.getByLabelText(/Authors:/i);
+    fireEvent.change(authors, { target: { value: newAuthor } });
+    const form = authors.closest("form");
+    form && fireEvent.submit(form, { preventDefault: jest.fn() });
+    row?.querySelector("td");
+    const updatedAuthorCell = row?.querySelector("td");
+    expect(updatedAuthorCell).toHaveTextContent(newAuthor);
   });
 });

@@ -27,6 +27,15 @@ export const BookOverview = () => {
   };
   const isBookSelected = (book: Book): boolean => book === selectedBook;
 
+  const updateBook = (bookToUpdate: Book) => {
+    setBooks((prevBooks) =>
+      prevBooks.map((book) =>
+        book.id === bookToUpdate.id ? bookToUpdate : book,
+      ),
+    );
+    setSelectedBook(bookToUpdate);
+  };
+
   return (
     <div className="container">
       <div className="row">
@@ -55,7 +64,13 @@ export const BookOverview = () => {
           </table>
         </div>
         <div className="col-md-4 col-12">
-          {selectedBook && <BookDetails book={selectedBook} />}
+          {selectedBook && (
+            <BookDetails
+              key={selectedBook.id}
+              book={selectedBook}
+              onBookChange={updateBook}
+            />
+          )}
         </div>
       </div>
     </div>

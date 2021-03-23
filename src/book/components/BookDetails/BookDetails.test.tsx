@@ -8,32 +8,38 @@ describe("BookDetails", () => {
     title: "Example Book",
     authors: "John Example",
   };
+  const callbackMock = jest.fn();
   it("renders without crashing", () => {
     // given
     const div = document.createElement("div");
     // when
-    ReactDOM.render(<BookDetails book={currentBook} />, div);
+    ReactDOM.render(
+      <BookDetails book={currentBook} onBookChange={callbackMock} />,
+      div,
+    );
     // then no errors thrown
     ReactDOM.unmountComponentAtNode(div);
   });
 
   it("renders authors with a label", () => {
+    // given
+    render(<BookDetails book={currentBook} onBookChange={callbackMock} />);
     // when
-    render(<BookDetails book={currentBook} />);
     const label = screen.getByText(/Authors:/i);
-    const authors = screen.getByText(/John Example/i);
+    const authorsInput = screen.getByLabelText(/Authors:/i) as HTMLInputElement;
     // then
-    expect(label).toHaveTextContent("Authors:");
-    expect(authors).toHaveTextContent(currentBook.authors);
+    expect(label).toBeInTheDocument();
+    expect(authorsInput.value).toBe(currentBook.authors);
   });
 
   it("renders a title with a label", () => {
+    // given
+    render(<BookDetails book={currentBook} onBookChange={callbackMock} />);
     // when
-    render(<BookDetails book={currentBook} />);
     const label = screen.getByText(/Title:/i);
-    const title = screen.getByText(/Example Book/i);
+    const titleInput = screen.getByLabelText(/Title:/i) as HTMLInputElement;
     // then
-    expect(label).toHaveTextContent("Title:");
-    expect(title).toHaveTextContent(currentBook.title);
+    expect(label).toBeInTheDocument();
+    expect(titleInput.value).toBe(currentBook.title);
   });
 });
