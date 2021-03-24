@@ -1,4 +1,6 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, act, fireEvent } from "@testing-library/react";
+import { createMemoryHistory } from "history";
+import { Router } from "react-router-dom";
 import { BookOverview } from "./BookOverview";
 import { BookContext, BookService } from "../../services/BooksService";
 import { Book } from "../../book";
@@ -8,6 +10,7 @@ describe("Book Overview Component", () => {
     jest.spyOn(console, "error").mockImplementation(() => {});
   });
   jest.useFakeTimers();
+  const history = createMemoryHistory();
   let bookServiceMockPromise: Promise<Book[]>;
   const bookServiceMock = {
     findAll() {
@@ -28,9 +31,11 @@ describe("Book Overview Component", () => {
   } as BookService;
 
   const wrapper = ({ children }: any) => (
-    <BookContext.Provider value={bookServiceMock}>
-      {children}
-    </BookContext.Provider>
+    <Router history={history}>
+      <BookContext.Provider value={bookServiceMock}>
+        {children}
+      </BookContext.Provider>
+    </Router>
   );
 
   it("renders the master table having three columns", () => {
@@ -64,8 +69,9 @@ describe("Book Overview Component", () => {
       expect(joeSmithRow).toBeInTheDocument();
     });
   });
-  it("renders details upon click on the row", () => {
+  it("change path after row click", () => {
     // given
+    history.push = jest.fn();
     act(() => {
       render(<BookOverview />, { wrapper });
       jest.runAllTimers();
@@ -74,29 +80,7 @@ describe("Book Overview Component", () => {
     return bookServiceMockPromise.then(() => {
       const row = screen.getByText(/John Example/i).closest("tr");
       row && fireEvent.click(row);
-      // then
-      expect(screen.getByText(/Authors:/i)).toBeInTheDocument();
-    });
-  });
-
-  it("updates a book row upon changes done in the details", () => {
-    // given
-    act(() => {
-      render(<BookOverview />, { wrapper });
-      jest.runAllTimers();
-    });
-    // when
-    return bookServiceMockPromise.then(() => {
-      const row = screen.getByText(/John Example/i).closest("tr");
-      row && fireEvent.click(row);
-      const newAuthor = "New Author";
-      const authors = screen.getByLabelText(/Authors:/i);
-      fireEvent.change(authors, { target: { value: newAuthor } });
-      const form = authors.closest("form");
-      form && fireEvent.submit(form, { preventDefault: jest.fn() });
-      row?.querySelector("td");
-      const updatedAuthorCell = row?.querySelector("td");
-      expect(updatedAuthorCell).toHaveTextContent(newAuthor);
+      expect(history.push).toHaveBeenCalled();
     });
   });
 });

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Book } from "../../book";
-import { BookDetails } from "../BookDetails/BookDetails";
 import { useBookService } from "../../services/BooksService";
 
 export interface Props {}
@@ -8,24 +8,11 @@ export interface Props {}
 export const BookOverview = () => {
   const { findAll } = useBookService();
   const [books, setBooks] = useState<Book[]>([]);
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const { push } = useHistory();
 
   useEffect(() => {
     findAll().then((books: Book[]) => setBooks(books));
   }, []);
-  const selectBook = (book: Book): void => {
-    setSelectedBook(book);
-  };
-  const isBookSelected = (book: Book): boolean => book === selectedBook;
-
-  const updateBook = (bookToUpdate: Book) => {
-    setBooks((prevBooks) =>
-      prevBooks.map((book) =>
-        book.id === bookToUpdate.id ? bookToUpdate : book,
-      ),
-    );
-    setSelectedBook(bookToUpdate);
-  };
 
   return (
     <div className="container">
@@ -43,8 +30,7 @@ export const BookOverview = () => {
               {books.map((book, index) => (
                 <tr
                   key={book.id}
-                  className={isBookSelected(book) ? "table-active" : ""}
-                  onClick={() => selectBook(book)}
+                  onClick={() => push(`/book-app/book/${book.id}`)}
                 >
                   <th scope="row">{index + 1}</th>
                   <td>{book.authors}</td>
@@ -53,15 +39,6 @@ export const BookOverview = () => {
               ))}
             </tbody>
           </table>
-        </div>
-        <div className="col-md-4 col-12">
-          {selectedBook && (
-            <BookDetails
-              key={selectedBook.id}
-              book={selectedBook}
-              onBookChange={updateBook}
-            />
-          )}
         </div>
       </div>
     </div>

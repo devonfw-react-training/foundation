@@ -1,6 +1,9 @@
-import ReactDOM from "react-dom";
+import { render, screen, act } from "@testing-library/react";
+import { createMemoryHistory } from "history";
+import { Router } from "react-router-dom";
+import { BookContext, BookService } from "../../services/BooksService";
+import { Book } from "../../book";
 import { BookDetails } from "./BookDetails";
-import { render, screen } from "@testing-library/react";
 
 describe("BookDetails", () => {
   const currentBook = {
@@ -8,38 +11,61 @@ describe("BookDetails", () => {
     title: "Example Book",
     authors: "John Example",
   };
-  const callbackMock = jest.fn();
-  it("renders without crashing", () => {
-    // given
-    const div = document.createElement("div");
-    // when
-    ReactDOM.render(
-      <BookDetails book={currentBook} onBookChange={callbackMock} />,
-      div,
-    );
-    // then no errors thrown
-    ReactDOM.unmountComponentAtNode(div);
+  beforeAll(() => {
+    jest.spyOn(console, "error").mockImplementation(() => {});
   });
+  jest.useFakeTimers();
+  const history = createMemoryHistory();
+  let bookServiceMockPromise: Promise<Book>;
+  const bookServiceMock = ({
+    findOne: () => {
+      bookServiceMockPromise = Promise.resolve(currentBook);
+      return bookServiceMockPromise;
+    },
+    save: (book: Book) => {
+      bookServiceMockPromise = Promise.resolve(book);
+      return bookServiceMockPromise;
+    },
+  } as unknown) as BookService;
+  const wrapper = ({ children }: any) => (
+    <Router history={history}>
+      <BookContext.Provider value={bookServiceMock}>
+        {children}
+      </BookContext.Provider>
+    </Router>
+  );
 
   it("renders authors with a label", () => {
     // given
-    render(<BookDetails book={currentBook} onBookChange={callbackMock} />);
+    act(() => {
+      render(<BookDetails />, { wrapper });
+      jest.runAllTimers();
+    });
     // when
-    const label = screen.getByText(/Authors:/i);
-    const authorsInput = screen.getByLabelText(/Authors:/i) as HTMLInputElement;
-    // then
-    expect(label).toBeInTheDocument();
-    expect(authorsInput.value).toBe(currentBook.authors);
+    return bookServiceMockPromise?.then(() => {
+      const label = screen.getByText(/Authors:/i);
+      const authorsInput = screen.getByLabelText(
+        /Authors:/i,
+      ) as HTMLInputElement;
+      // then
+      expect(label).toBeInTheDocument();
+      expect(authorsInput.value).toBe(currentBook.authors);
+    });
   });
 
   it("renders a title with a label", () => {
     // given
-    render(<BookDetails book={currentBook} onBookChange={callbackMock} />);
+    act(() => {
+      render(<BookDetails />, { wrapper });
+      jest.runAllTimers();
+    });
     // when
-    const label = screen.getByText(/Title:/i);
-    const titleInput = screen.getByLabelText(/Title:/i) as HTMLInputElement;
-    // then
-    expect(label).toBeInTheDocument();
-    expect(titleInput.value).toBe(currentBook.title);
+    return bookServiceMockPromise?.then(() => {
+      const label = screen.getByText(/Title:/i);
+      const titleInput = screen.getByLabelText(/Title:/i) as HTMLInputElement;
+      // then
+      expect(label).toBeInTheDocument();
+      expect(titleInput.value).toBe(currentBook.title);
+    });
   });
 });

@@ -1,14 +1,28 @@
-import { useState, ChangeEvent, SyntheticEvent } from "react";
+import { useState, useEffect, ChangeEvent, SyntheticEvent } from "react";
+import { useParams, useHistory } from "react-router-dom";
+import { useBookService } from "../../services/BooksService";
 import { Book } from "../../book";
 import { Label } from "./BookDetails.css";
 
-export interface Props {
-  book: Book;
-  onBookChange: (book: Book) => void;
+interface ParamTypes {
+  id: string;
 }
 
-export const BookDetails = (props: Props) => {
-  const [book, setBook] = useState<Book>({ ...props.book });
+const initBook = { id: NaN, title: "", authors: "" };
+
+export const BookDetails = () => {
+  const { save, findOne } = useBookService();
+  const { id } = useParams<ParamTypes>();
+  const { push } = useHistory();
+  const [book, setBook] = useState<Book>(initBook);
+
+  useEffect(() => {
+    if (id) {
+      findOne(+id).then((book) => {
+        setBook(book);
+      });
+    }
+  }, []);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.currentTarget;
@@ -17,9 +31,7 @@ export const BookDetails = (props: Props) => {
 
   const notifyOnBookChange = (e: SyntheticEvent) => {
     e.preventDefault();
-    if (props.onBookChange) {
-      props.onBookChange(book);
-    }
+    save(book).then(() => push("/book-app/books"));
   };
   return (
     <div>

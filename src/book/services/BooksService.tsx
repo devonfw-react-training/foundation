@@ -40,14 +40,14 @@ export const useBooks = (initial: Book[]) => {
   };
   const save: BookService["save"] = (bookToSave) => {
     const id = bookToSave.id;
-    if (id != null) {
+    if (id) {
       const book = books.find((book) => book.id === id);
       if (book) {
         Object.assign(book, bookToSave);
         return findOne(id);
       }
     }
-    return saveNewAndFindOne(bookToSave);
+    return Promise.resolve(saveNew(bookToSave));
   };
   const saveNew: BookService["saveNew"] = (bookToSave) => {
     const savedBook = {
@@ -56,10 +56,6 @@ export const useBooks = (initial: Book[]) => {
     };
     setBooks([...books, savedBook]);
     return savedBook;
-  };
-  const saveNewAndFindOne = (bookToSave: BookProperties) => {
-    const { id } = saveNew(bookToSave);
-    return findOne(id!);
   };
 
   return {
