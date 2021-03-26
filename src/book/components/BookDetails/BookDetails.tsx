@@ -27,7 +27,7 @@ interface ParamTypes {
 const initBook: BookProperties = { title: "", authors: "" };
 
 export const BookDetails = () => {
-  const { save, findOne } = useBookService();
+  const { save, saveNew, findOne } = useBookService();
   const { id } = useParams<ParamTypes>();
   const { push } = useHistory();
   const { register, handleSubmit, errors, reset } = useForm({
@@ -43,7 +43,11 @@ export const BookDetails = () => {
   }, []);
 
   const notifyOnBookChange = (data: BookProperties) => {
-    save({ id: +id, ...data }).then(() => push("/book-app/books"));
+    if (id) {
+      save({ id: +id, ...data }).then(() => push("/book-app/books"));
+    } else {
+      saveNew(data).then(() => push("/book-app/books"));
+    }
   };
   return (
     <div>

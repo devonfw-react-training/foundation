@@ -1,0 +1,61 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "authors": "Joshua Bloch",
+      "title": "Effective Java, 2nd Edition"
+    },
+    {
+      "id": 2,
+      "authors": "Gavin King",
+      "title": "Java Persistence With Hibernate"
+    },
+    {
+      "id": 3,
+      "authors": "Douglas Crockford",
+      "title": "JavaScript: The Good Parts"
+    },
+    {
+      "id": 4,
+      "authors": "Kent Beck",
+      "title": "Test Driven Development"
+    },
+    {
+      "id": 5,
+      "authors": "John Example 6 edited",
+      "title": "Book 6 edited"
+    }
+  ],
+  "users": [
+    {
+      "username": "username #1",
+      "password": "password",
+      "email": "email@email.com",
+      "id": 1
+    },
+    {
+      "username": "username #2",
+      "password": "password",
+      "email": "email2@email.com",
+      "id": 2
+    },
+    {
+      "username": "username #3",
+      "password": "password",
+      "email": "email3@test.com",
+      "id": 3
+    },
+    {
+      "username": "username #4",
+      "password": "password",
+      "email": "email4@test.com",
+      "id": 4
+    },
+    {
+      "username": "email2@test.com",
+      "password": "password",
+      "email": "email@gmail.com",
+      "id": 5
+    }
+  ]
+}
