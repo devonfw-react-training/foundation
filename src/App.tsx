@@ -1,13 +1,14 @@
 import { BrowserRouter, NavLink, Route, Switch } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { BookOverview } from "./book/components/BookOverview/BookOverview";
 import { BookDetails } from "./book/components/BookDetails/BookDetails";
 import { UserForm } from "./user/components/UserForm/UserForm";
 import { UserList } from "./user/components/UserList/UserList";
+import { HomePage } from "./HomePage/HomePage";
 
 import { BookProvider } from "./book/services/BooksService";
 import { UserProvider } from "./user/services/UserService";
 import { Container } from "./App.css";
-import { HomePage } from "./HomePage/HomePage";
 
 export const NavBar = () => (
   <nav>
@@ -76,11 +77,13 @@ export const Routes = () => (
 const App = () => (
   <Container>
     <BrowserRouter>
-      <BookProvider>
-        <UserProvider>
-          <Routes />
-        </UserProvider>
-      </BookProvider>
+      <QueryClientProvider client={new QueryClient()}>
+        <BookProvider>
+          <UserProvider>
+            <Routes />
+          </UserProvider>
+        </BookProvider>
+      </QueryClientProvider>
     </BrowserRouter>
   </Container>
 );
