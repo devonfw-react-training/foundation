@@ -39,8 +39,10 @@ export const BookDetails = () => {
       findOne(+id).then((book) => {
         reset(book);
       });
+    } else {
+      reset(initBook);
     }
-  }, []);
+  }, [id]);
 
   const notifyOnBookChange = (data: BookProperties) => {
     save({ id: +id, ...data }).then(() => push("/book-app/books"));
