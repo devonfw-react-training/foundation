@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { User } from "../../user";
 import { useUserService } from "../../services/UserService";
 
@@ -6,13 +6,11 @@ export interface Props {}
 
 export const UserList = () => {
   const { findAll } = useUserService();
-  const [users, setUsers] = useState<User[]>([]);
+  const { isLoading, error, data } = useQuery<User[], Error>("users", findAll);
 
-  useEffect(() => {
-    findAll().then((books: User[]) => setUsers(books));
-  }, []);
-
-  return (
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>An error has occurred: " + {error.message}</div>;
+  return data ? (
     <div className="container">
       <div className="row">
         <div className="col-md-8 col-12">
@@ -25,7 +23,7 @@ export const UserList = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, index) => (
+              {data.map((user, index) => (
                 <tr key={user.id}>
                   <th scope="row">{index + 1}</th>
                   <td>{user.username}</td>
@@ -37,5 +35,5 @@ export const UserList = () => {
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };

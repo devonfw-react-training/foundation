@@ -22,8 +22,8 @@ export const useUsers = () => {
       method: "POST",
       headers,
       body: JSON.stringify({
-        query: `mutation ($id: ID! $username: String! $password: String! $email: String!) {
-          createUser(id: $id username: $username password: $password email: $email) {
+        query: `mutation ($username: String! $password: String! $email: String!) {
+          createUser(username: $username password: $password email: $email) {
             id
             username
             password

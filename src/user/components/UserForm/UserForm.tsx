@@ -1,3 +1,4 @@
+import { useMutation } from "react-query";
 import { useHistory } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useUserService } from "../../services/UserService";
@@ -27,9 +28,14 @@ export const UserForm = () => {
   const { register, handleSubmit, errors } = useForm({
     defaultValues: initUser,
   });
+  const { mutate } = useMutation<any, Error, UserProperties>(saveNew, {
+    onSuccess: () => {
+      push("/users/list");
+    },
+  });
 
   const notifyOnUserChange = (data: UserProperties) => {
-    saveNew(data).then(() => push("/users/list"));
+    mutate(data);
   };
   return (
     <div>
