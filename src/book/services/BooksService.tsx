@@ -8,7 +8,7 @@ export interface BookService {
   save: (bookToSave: Book) => Promise<Book>;
   saveNew: (book: BookProperties) => Book;
 }
-const dalay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const BookContext = createContext<BookService>({} as BookService);
 
@@ -29,11 +29,11 @@ export const useBooks = (initial: Book[]) => {
   const [books, setBooks] = useState<Book[]>(initial);
 
   const findAll: BookService["findAll"] = () => {
-    return dalay(2000).then(() => [...books]);
+    return delay(2000).then(() => [...books]);
   };
   const findOne: BookService["findOne"] = (id) => {
     const book = books.find((book) => book.id === id);
-    return dalay(1000).then(() => {
+    return delay(1000).then(() => {
       if (!book) throw new Error(`book with id: ${id} not found`);
       return book;
     });
