@@ -56,7 +56,7 @@ export const BookDetails = (props: Props) => {
         </div>
         <div className="form-group row">
           <div className="offset-sm-3 col-sm-9">
-            <button className="btn btn-primary">Apply</button>
+            <button type="submit" name="apply" className="btn btn-primary">Apply</button>
           </div>
         </div>
       </form>
