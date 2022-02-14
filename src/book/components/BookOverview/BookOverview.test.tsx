@@ -1,10 +1,10 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { BookOverview } from "./BookOverview";
 import { BookContext, getURI, useBooks } from "../../services/BooksService";
 import { Book } from "../../book";
 import userEvent from "@testing-library/user-event";
 
-const mockedResponseBooks = [
+const mockedResponseBooks: Book[] = [
   {
     id: 1,
     authors: "Julius Verne",
