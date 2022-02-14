@@ -1,12 +1,42 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { BookOverview } from "./BookOverview";
-import { BookContext, BookService } from "../../services/BooksService";
+import { BookContext, BookService, getURI } from "../../services/BooksService";
 import { Book } from "../../book";
 
-describe("Book Overview Component", () => {
+const mockedResponseBooks = [
+  {
+    id: 1,
+    authors: "Julius Verne",
+    title: "80 days around the world",
+  },
+  {
+    id: 2,
+    authors: "Joe Smith",
+    title: "Another Book",
+  },
+] 
+
+const mockFetch = async function mockFetch(url: string, config: Record<string, any>) {
+  switch (url) {
+    case getURI("books"): {
+      return {
+        ok: true,
+        json: async () => (mockedResponseBooks),
+      }
+    }
+    default: {
+      throw new Error(`Unhandled request: ${url}`)
+    }
+  }
+}
+
+describe("Book Overview Component with mocked http responses", () => {
   beforeAll(() => {
+    jest.spyOn(window, 'fetch')
     jest.spyOn(console, "error").mockImplementation(() => {});
-  });
+  })
+  beforeEach(async () => await (window.fetch as any).mockImplementation(mockFetch))
+
   jest.useFakeTimers();
   let bookServiceMockPromise: Promise<Book[]>;
   const bookServiceMock = {

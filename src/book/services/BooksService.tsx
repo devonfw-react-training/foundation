@@ -1,7 +1,7 @@
 import React, { createContext, useContext, FC } from "react";
 import { Book, BookProperties } from "../book";
 
-const getURI = (endpoint: string) => `http://localhost:8000/${endpoint}`;
+export const getURI = (endpoint: string) => `http://localhost:8000/${endpoint}`;
 const headers = {
   "Content-Type": "application/json",
 };
