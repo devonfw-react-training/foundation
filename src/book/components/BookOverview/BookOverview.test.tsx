@@ -85,6 +85,7 @@ describe("Book Overview Component with mocked http responses", () => {
     row && userEvent.click(row);
     const newAuthor = "New Author";
     const authors = screen.getByLabelText(/Authors:/i);
+    userEvent.clear(authors);
     userEvent.type(authors, newAuthor);
     const formSubmitBtn = screen.getByRole("button", { name: "Apply" })
     formSubmitBtn && formSubmitBtn.click();
