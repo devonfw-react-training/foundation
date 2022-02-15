@@ -15,21 +15,46 @@ const mockedResponseBooks: Book[] = [
   },
 ];
 
+interface HttpRequestConfig {
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  headers: { "Content-Type": string };
+  body: any;
+}
+
 const mockFetch = async function mockFetch(
   url: string,
-  config: Record<string, any>,
+  payload: HttpRequestConfig,
 ) {
-  switch (url) {
-    case getURI("books"): {
-      return {
-        ok: true,
-        json: async () => mockedResponseBooks,
-      };
-    }
-    default: {
-      throw new Error(`Unhandled request: ${url}`);
-    }
+  const method = (payload && payload.method) || "GET";
+  console.log("HTTP CONFIG CALL", url, payload);
+  if (method === "GET" && url === getURI("books")) {
+    return {
+      ok: true,
+      json: async () => mockedResponseBooks,
+    };
   }
+
+  if (
+    method === "GET" &&
+    new RegExp(`^${getURI("books")}/([0-9])$`).test(url)
+  ) {
+    const id = +url.split(`${getURI("books")}/`)[1];
+    return {
+      ok: true,
+      json: async () => mockedResponseBooks.find((book) => book.id === id),
+    };
+  }
+
+  if (
+    method === "PUT" &&
+    new RegExp(`^${getURI("books")}/([0-9])$`).test(url)
+  ) {
+    return {
+      ok: true,
+      json: async () => JSON.parse(payload.body),
+    };
+  }
+  throw new Error(`Unhandled request: ${url}`);
 };
 
 describe("BookService", () => {
@@ -52,54 +77,51 @@ describe("BookService", () => {
     expect(data[0].authors).toEqual(bookToCheck.authors);
     expect(data[0].title).toEqual(bookToCheck.title);
   });
-  //   it("updates an existing book", () => {
-  //     // given
-  //     expect.hasAssertions();
-  //     const bookToSave = { id: 1, authors: "Some author", title: "Some title" };
-  //     const prevBook = books.find(({ id }) => id === bookToSave.id) as Book;
-  //     // when
-  //     const { result } = renderHook(() => useBooks());
-  //     // then
-  //     const findPromise = result.current.save(bookToSave).then((savedBook) => {
-  //       // then
-  //       expect(savedBook.id).toBe(prevBook.id);
-  //       expect(savedBook.authors).toBe(prevBook.authors);
-  //       expect(savedBook.title).toBe(prevBook.title);
-  //     });
-  //     jest.runAllTimers();
-  //     return findPromise;
-  //   });
-  //   it("finds a book", () => {
-  //     // given
-  //     expect.hasAssertions();
-  //     const book = {
-  //       id: 2,
-  //       authors: "Joe Smith",
-  //       title: "Another Book",
-  //     };
-  //     // when
-  //     const { result } = renderHook(() => useBooks());
-  //     const findPromise = result.current.findOne(book.id).then((foundBook) => {
-  //       // then
-  //       expect(foundBook.id).toBe(book.id);
-  //       expect(foundBook.authors).toBe(book.authors);
-  //       expect(foundBook.title).toBe(book.title);
-  //     });
-  //     jest.runAllTimers();
-  //     return findPromise;
-  //   });
-  //   it("saves a new book", () => {
-  //     // given
-  //     const bookToSave = { authors: "Some author", title: "Some title" };
-  //     // when
-  //     const { result } = renderHook(() => useBooks());
-  //     const saveBookPromise = result.current.saveNew(bookToSave).then((savedBook) => {
+
+  it("finds a book", async () => {
+    // given
+    expect.hasAssertions();
+    const existingBook = mockedResponseBooks[0];
+
+    // when
+    const { result } = renderHook(() => useBooks());
+    const foundBook = await result.current.findOne(existingBook.id);
+
+    // then
+    expect(foundBook.id).toBe(existingBook.id);
+    expect(foundBook.authors).toBe(existingBook.authors);
+    expect(foundBook.title).toBe(existingBook.title);
+  });
+
+  it("updates an existing book", async () => {
+    // given
+    expect.hasAssertions();
+    const bookToSave = { id: 1, authors: "New author", title: "New title" };
+
+    // when
+    const { result } = renderHook(() => useBooks());
+    // then
+    const savedBook = await result.current.save(bookToSave);
+
+    expect(savedBook.id).toBe(bookToSave.id);
+    expect(savedBook.authors).toBe(bookToSave.authors);
+    expect(savedBook.title).toBe(bookToSave.title);
+  });
+
+  // it("saves a new book", () => {
+  //   // given
+  //   const bookToSave = { authors: "Some author", title: "Some title" };
+  //   // when
+  //   const { result } = renderHook(() => useBooks());
+  //   const saveBookPromise = result.current
+  //     .saveNew(bookToSave)
+  //     .then((savedBook) => {
   //       //then
   //       expect(savedBook.id).toBeDefined();
   //       expect(savedBook.authors).toBe(bookToSave.authors);
   //       expect(savedBook.title).toBe(bookToSave.title);
   //     });
-  //     jest.runAllTimers();
-  //     return saveBookPromise;
-  //   })
+  //   jest.runAllTimers();
+  //   return saveBookPromise;
+  // });
 });
