@@ -54,6 +54,15 @@ const mockFetch = async function mockFetch(
       json: async () => JSON.parse(payload.body),
     };
   }
+
+  if (method === "POST" && new RegExp(`^${getURI("books")}`).test(url)) {
+    const body = JSON.parse(payload.body);
+    return {
+      ok: true,
+      json: async () => ({ ...body, id: mockedResponseBooks.length + 1 }),
+    };
+  }
+
   throw new Error(`Unhandled request: ${url}`);
 };
 
@@ -108,20 +117,16 @@ describe("BookService", () => {
     expect(savedBook.title).toBe(bookToSave.title);
   });
 
-  // it("saves a new book", () => {
-  //   // given
-  //   const bookToSave = { authors: "Some author", title: "Some title" };
-  //   // when
-  //   const { result } = renderHook(() => useBooks());
-  //   const saveBookPromise = result.current
-  //     .saveNew(bookToSave)
-  //     .then((savedBook) => {
-  //       //then
-  //       expect(savedBook.id).toBeDefined();
-  //       expect(savedBook.authors).toBe(bookToSave.authors);
-  //       expect(savedBook.title).toBe(bookToSave.title);
-  //     });
-  //   jest.runAllTimers();
-  //   return saveBookPromise;
-  // });
+  it("saves a new book", async () => {
+    // given
+    const bookToSave = { authors: "Some author", title: "Some title" };
+    // when
+    const { result } = renderHook(() => useBooks());
+    const savedBook = await result.current.saveNew(bookToSave);
+
+    //then
+    expect(savedBook.id).toBeDefined();
+    expect(savedBook.authors).toBe(bookToSave.authors);
+    expect(savedBook.title).toBe(bookToSave.title);
+  });
 });
