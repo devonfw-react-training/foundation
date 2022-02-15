@@ -1,6 +1,16 @@
 import React, { Component, ReactNode } from "react";
 import { Book } from "../../book";
 import { BookDetails } from "../BookDetails/BookDetails";
+import {
+  Grid,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+} from "@mui/material";
 
 export interface Props {}
 
@@ -42,39 +52,42 @@ export class BookOverview extends Component<Props, State> {
 
   render(): ReactNode {
     return (
-      <div className="container">
-        <div className="row">
-          <div className="col-md-8 col-12">
-            <table className="table table-hover">
-              <thead>
-                <tr>
-                  <th scope="col">#</th>
-                  <th scope="col">Authors</th>
-                  <th scope="col">Title</th>
-                </tr>
-              </thead>
-              <tbody>
+      <Grid container spacing={2}>
+        <Grid item md={8}>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>#</TableCell>
+                  <TableCell>Authors</TableCell>
+                  <TableCell>Title</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
                 {this.state.books.map((book, index) => (
-                  <tr
+                  <TableRow
+                    hover
                     key={book.id}
-                    className={this.isBookSelected(book) ? "table-active" : ""}
                     onClick={() => this.selectBook(book)}
+                    selected={this.isBookSelected(book)}
                   >
-                    <th scope="row">{index + 1}</th>
-                    <td>{book.authors}</td>
-                    <td>{book.title}</td>
-                  </tr>
+                    <TableCell component="th" scope="row">
+                      {index + 1}
+                    </TableCell>
+                    <TableCell>{book.authors}</TableCell>
+                    <TableCell>{book.title}</TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="col-md-4 col-12">
-            {this.state.selectedBook && (
-              <BookDetails book={this.state.selectedBook} />
-            )}
-          </div>
-        </div>
-      </div>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Grid>
+        <Grid item md={4}>
+          {this.state.selectedBook && (
+            <BookDetails book={this.state.selectedBook} />
+          )}
+        </Grid>
+      </Grid>
     );
   }
 }

@@ -1,5 +1,5 @@
 import { BookOverview } from "./book/components/BookOverview/BookOverview";
-import { Container } from "./App.css";
+import { Container } from "@mui/material";
 
 const App = () => (
   <Container>
