@@ -1,22 +1,34 @@
-import { BrowserRouter, NavLink, Redirect, Route, Switch } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { BookOverview } from './book/components/BookOverview/BookOverview';
-import { BookDetails } from './book/components/BookDetails/BookDetails';
-
-import { BookProvider } from './book/services/BooksService';
-import { Container } from './App.css';
-import { store } from './book/store/store';
+import {
+  BrowserRouter,
+  NavLink,
+  Navigate,
+  Route,
+  Routes,
+} from "react-router-dom";
+import { BookOverview } from "./book/components/BookOverview/BookOverview";
+import { BookDetails } from "./book/components/BookDetails/BookDetails";
+import { Provider } from "react-redux";
+import { BookProvider } from "./book/services/BooksService";
+import { Container } from "./App.css";
+import { store } from "./book/store/store";
 
 export const NavBar = () => (
   <nav>
-    <ul className='nav nav-pills'>
-      <li className='nav-item'>
-        <NavLink to='/book-app/books' activeClassName='active' className='nav-link'>
+    <ul className="nav nav-pills">
+      <li className="nav-item">
+        <NavLink
+          to="/book-app/books"
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+        >
           Book Overview
         </NavLink>
       </li>
-      <li className='nav-item'>
-        <NavLink to='/book-app/book' exact activeClassName='active' className='nav-link'>
+      <li className="nav-item">
+        <NavLink
+          to="/book-app/book"
+          end
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
+        >
           New Book
         </NavLink>
       </li>
@@ -24,14 +36,15 @@ export const NavBar = () => (
   </nav>
 );
 
-export const Routes = () => (
+export const AppRoutes = () => (
   <>
     <NavBar />
-    <Switch>
-      <Route path='/book-app/book/:id?' component={BookDetails} />
-      <Route path='/book-app/books' component={BookOverview} />
-      <Redirect to='/book-app/books' />
-    </Switch>
+    <Routes>
+      <Route path="/" element={<Navigate to="/book-app/books" replace />} />
+      <Route path="/book-app/books" element={<BookOverview />} />
+      <Route path="/book-app/book" element={<BookDetails />} />
+      <Route path="/book-app/book/:id" element={<BookDetails />} />
+    </Routes>
   </>
 );
 
@@ -40,7 +53,7 @@ const App = () => (
     <Provider store={store}>
       <BrowserRouter>
         <BookProvider>
-          <Routes />
+          <AppRoutes />
         </BookProvider>
       </BrowserRouter>
     </Provider>

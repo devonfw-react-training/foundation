@@ -1,6 +1,5 @@
 import { render, screen, act } from "@testing-library/react";
-import { createMemoryHistory } from "history";
-import { Router } from "react-router-dom";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { BookContext, BookService } from "../../services/BooksService";
 import { Book } from "../../book";
 import { BookDetails } from "./BookDetails";
@@ -15,9 +14,8 @@ describe("BookDetails", () => {
     jest.spyOn(console, "error").mockImplementation(() => {});
   });
   jest.useFakeTimers();
-  const history = createMemoryHistory();
   let bookServiceMockPromise: Promise<Book>;
-  const bookServiceMock = ({
+  const bookServiceMock = {
     findOne: () => {
       bookServiceMockPromise = Promise.resolve(currentBook);
       return bookServiceMockPromise;
@@ -26,13 +24,16 @@ describe("BookDetails", () => {
       bookServiceMockPromise = Promise.resolve(book);
       return bookServiceMockPromise;
     },
-  } as unknown) as BookService;
+  } as unknown as BookService;
+
   const wrapper = ({ children }: any) => (
-    <Router history={history}>
-      <BookContext.Provider value={bookServiceMock}>
-        {children}
-      </BookContext.Provider>
-    </Router>
+    <BookContext.Provider value={bookServiceMock}>
+      <MemoryRouter>
+        <Routes>
+          <Route path="/" element={children} />
+        </Routes>
+      </MemoryRouter>
+    </BookContext.Provider>
   );
 
   it("renders authors with a label", () => {
