@@ -1,5 +1,5 @@
 import { useMutation } from "react-query";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useUserService } from "../../services/UserService";
 import { UserProperties } from "../../user";
@@ -24,13 +24,13 @@ const initUser: UserProperties = { username: "", password: "", email: "" };
 
 export const UserForm = () => {
   const { saveNew } = useUserService();
-  const { push } = useHistory();
+  const navigate = useNavigate();
   const { register, handleSubmit, errors } = useForm({
     defaultValues: initUser,
   });
   const { mutate } = useMutation<any, Error, UserProperties>(saveNew, {
     onSuccess: () => {
-      push("/users/list");
+      navigate("/users/list");
     },
   });
 
