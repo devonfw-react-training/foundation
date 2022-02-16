@@ -1,6 +1,11 @@
-import { render, screen, act, fireEvent } from "@testing-library/react";
-import { createMemoryHistory } from "history";
-import { Router } from "react-router-dom";
+import {
+  render,
+  screen,
+  act,
+  fireEvent,
+  waitFor,
+} from "@testing-library/react";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./BookOverview";
 import { BookContext, BookService } from "../../services/BooksService";
 import { Book } from "../../book";
@@ -10,7 +15,6 @@ describe("Book Overview Component", () => {
     jest.spyOn(console, "error").mockImplementation(() => {});
   });
   jest.useFakeTimers();
-  const history = createMemoryHistory();
   let bookServiceMockPromise: Promise<Book[]>;
   const bookServiceMock = {
     findAll() {
@@ -31,11 +35,17 @@ describe("Book Overview Component", () => {
   } as BookService;
 
   const wrapper = ({ children }: any) => (
-    <Router history={history}>
-      <BookContext.Provider value={bookServiceMock}>
-        {children}
-      </BookContext.Provider>
-    </Router>
+    <BookContext.Provider value={bookServiceMock}>
+      <MemoryRouter>
+        <Routes>
+          <Route path="/" element={children} />
+          <Route
+            path="/book-app/book/1"
+            element={<div>Book Details Component</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    </BookContext.Provider>
   );
 
   it("renders the master table having three columns", () => {
@@ -71,7 +81,6 @@ describe("Book Overview Component", () => {
   });
   it("change path after row click", () => {
     // given
-    history.push = jest.fn();
     act(() => {
       render(<BookOverview />, { wrapper });
       jest.runAllTimers();
@@ -80,7 +89,7 @@ describe("Book Overview Component", () => {
     return bookServiceMockPromise.then(() => {
       const row = screen.getByText(/John Example/i).closest("tr");
       row && fireEvent.click(row);
-      expect(history.push).toHaveBeenCalled();
+      expect(screen.getByText(/Book Details Component/i)).toBeVisible();
     });
   });
 });

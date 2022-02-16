@@ -1,19 +1,19 @@
 import { useState, useEffect, ChangeEvent, SyntheticEvent } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useBookService } from "../../services/BooksService";
 import { Book } from "../../book";
 import { Label } from "./BookDetails.css";
 
-interface ParamTypes {
+type ParamTypes = {
   id: string;
-}
+};
 
 const initBook = { id: NaN, title: "", authors: "" };
 
 export const BookDetails = () => {
   const { save, findOne } = useBookService();
   const { id } = useParams<ParamTypes>();
-  const { push } = useHistory();
+  const navigate = useNavigate();
   const [book, setBook] = useState<Book>(initBook);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export const BookDetails = () => {
 
   const notifyOnBookChange = (e: SyntheticEvent) => {
     e.preventDefault();
-    save(book).then(() => push("/book-app/books"));
+    save(book).then(() => navigate("/book-app/books"));
   };
   return (
     <div>

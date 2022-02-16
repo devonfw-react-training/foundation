@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Book } from "../../book";
 import { useBookService } from "../../services/BooksService";
 
@@ -8,7 +8,7 @@ export interface Props {}
 export const BookOverview = () => {
   const { findAll } = useBookService();
   const [books, setBooks] = useState<Book[]>([]);
-  const { push } = useHistory();
+  const navigate = useNavigate();
 
   useEffect(() => {
     findAll().then((books: Book[]) => setBooks(books));
@@ -30,7 +30,7 @@ export const BookOverview = () => {
               {books.map((book, index) => (
                 <tr
                   key={book.id}
-                  onClick={() => push(`/book-app/book/${book.id}`)}
+                  onClick={() => navigate(`/book-app/book/${book.id}`)}
                 >
                   <th scope="row">{index + 1}</th>
                   <td>{book.authors}</td>
