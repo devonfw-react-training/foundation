@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useUserService } from "../../services/UserService";
 import { UserProperties } from "../../user";
@@ -23,13 +23,13 @@ const initUser: UserProperties = { username: "", password: "", email: "" };
 
 export const UserForm = () => {
   const { saveNew } = useUserService();
-  const { push } = useHistory();
+  const navigate = useNavigate();
   const { register, handleSubmit, errors } = useForm({
     defaultValues: initUser,
   });
 
   const notifyOnUserChange = (data: UserProperties) => {
-    saveNew(data).then(() => push("/users/list"));
+    saveNew(data).then(() => navigate("/users/list"));
   };
   return (
     <div>

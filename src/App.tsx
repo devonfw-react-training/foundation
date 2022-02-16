@@ -1,9 +1,9 @@
 import {
   BrowserRouter,
   NavLink,
-  Redirect,
+  Navigate,
   Route,
-  Switch,
+  Routes,
 } from "react-router-dom";
 import { BookOverview } from "./book/components/BookOverview/BookOverview";
 import { BookDetails } from "./book/components/BookDetails/BookDetails";
@@ -20,8 +20,7 @@ export const NavBar = () => (
       <li className="nav-item">
         <NavLink
           to="/book-app/books"
-          activeClassName="active"
-          className="nav-link"
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
         >
           Book Overview
         </NavLink>
@@ -29,9 +28,8 @@ export const NavBar = () => (
       <li className="nav-item">
         <NavLink
           to="/book-app/book"
-          exact
-          activeClassName="active"
-          className="nav-link"
+          end
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
         >
           New Book
         </NavLink>
@@ -39,9 +37,8 @@ export const NavBar = () => (
       <li className="nav-item">
         <NavLink
           to="/users/new"
-          exact
-          activeClassName="active"
-          className="nav-link"
+          end
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
         >
           New User
         </NavLink>
@@ -49,9 +46,8 @@ export const NavBar = () => (
       <li className="nav-item">
         <NavLink
           to="/users/list"
-          exact
-          activeClassName="active"
-          className="nav-link"
+          end
+          className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
         >
           User list
         </NavLink>
@@ -60,16 +56,17 @@ export const NavBar = () => (
   </nav>
 );
 
-export const Routes = () => (
+export const AppRoutes = () => (
   <>
     <NavBar />
-    <Switch>
-      <Route path="/book-app/book/:id?" component={BookDetails} />
-      <Route path="/book-app/books" component={BookOverview} />
-      <Route path="/users/new" component={UserForm} />
-      <Route path="/users/list" component={UserList} />
-      <Redirect to="/book-app/books" />
-    </Switch>
+    <Routes>
+      <Route path="/" element={<Navigate to="/book-app/books" replace />} />
+      <Route path="/book-app/books" element={<BookOverview />} />
+      <Route path="/book-app/book" element={<BookDetails />} />
+      <Route path="/book-app/book/:id" element={<BookDetails />} />
+      <Route path="/users/new" element={<UserForm />} />
+      <Route path="/users/list" element={<UserList />} />
+    </Routes>
   </>
 );
 
@@ -78,7 +75,7 @@ const App = () => (
     <BrowserRouter>
       <BookProvider>
         <UserProvider>
-          <Routes />
+          <AppRoutes />
         </UserProvider>
       </BookProvider>
     </BrowserRouter>
