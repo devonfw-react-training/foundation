@@ -7,53 +7,67 @@ import {
 } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./BookOverview";
-import { BookContext, BookService } from "../../services/BooksService";
+import { BookContext, getURI, useBooks } from "../../services/BooksService";
 import { Book } from "../../book";
+import userEvent from "@testing-library/user-event";
 
-describe("Book Overview Component", () => {
+const mockedResponseBooks: Book[] = [
+  {
+    id: 1,
+    authors: "Julius Verne",
+    title: "80 days around the world",
+  },
+  {
+    id: 2,
+    authors: "Frank Herbert",
+    title: "Dune",
+  },
+];
+
+const mockFetch = async function mockFetch(
+  url: string,
+  config: Record<string, any>,
+) {
+  switch (url) {
+    case getURI("books"): {
+      return {
+        ok: true,
+        json: async () => mockedResponseBooks,
+      };
+    }
+    default: {
+      throw new Error(`Unhandled request: ${url}`);
+    }
+  }
+};
+
+const WrapperComponent = ({ children }: any) => (
+  <BookContext.Provider value={useBooks()}>
+    <MemoryRouter>
+      <Routes>
+        <Route path="/" element={children} />
+        <Route
+          path="/book-app/book/1"
+          element={<div>Book Details Component</div>}
+        />
+      </Routes>
+    </MemoryRouter>
+  </BookContext.Provider>
+);
+
+describe("Book Overview Component with mocked http responses", () => {
   beforeAll(() => {
+    jest.spyOn(window, "fetch");
     jest.spyOn(console, "error").mockImplementation(() => {});
   });
-  jest.useFakeTimers();
-  let bookServiceMockPromise: Promise<Book[]>;
-  const bookServiceMock = {
-    findAll() {
-      bookServiceMockPromise = Promise.resolve([
-        {
-          id: 1,
-          authors: "John Example",
-          title: "Example Book",
-        },
-        {
-          id: 2,
-          authors: "Joe Smith",
-          title: "Another Book",
-        },
-      ]);
-      return bookServiceMockPromise;
-    },
-  } as BookService;
-
-  const wrapper = ({ children }: any) => (
-    <BookContext.Provider value={bookServiceMock}>
-      <MemoryRouter>
-        <Routes>
-          <Route path="/" element={children} />
-          <Route
-            path="/book-app/book/1"
-            element={<div>Book Details Component</div>}
-          />
-        </Routes>
-      </MemoryRouter>
-    </BookContext.Provider>
+  beforeEach(
+    async () => await (window.fetch as any).mockImplementation(mockFetch),
   );
 
   it("renders the master table having three columns", () => {
     // given
-    act(() => {
-      render(<BookOverview />, { wrapper });
-      jest.runAllTimers();
-    });
+    render(<BookOverview />, { wrapper: WrapperComponent });
+
     // when
     const noColumn = screen.getByText(/#/i);
     const authorsColumn = screen.getByText(/Authors/i);
@@ -63,33 +77,39 @@ describe("Book Overview Component", () => {
     expect(authorsColumn).toBeInTheDocument();
     expect(titleColumn).toBeInTheDocument();
   });
-  it("renders the master table rows", async () => {
+  it("Renders books table with data received from server", async () => {
     // given
     expect.hasAssertions();
-    act(() => {
-      render(<BookOverview />, { wrapper });
-    });
 
-    // when
-    return bookServiceMockPromise.then(() => {
-      const johnExamleRow = screen.getByText(/John Example/i);
-      const joeSmithRow = screen.getByText(/Joe Smith/i);
-      // then
-      expect(johnExamleRow).toBeInTheDocument();
-      expect(joeSmithRow).toBeInTheDocument();
-    });
+    render(<BookOverview />, { wrapper: WrapperComponent });
+    expect(await screen.findByText(/Julius Verne/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Frank Herbert/i)).toBeInTheDocument();
   });
-  it("change path after row click", () => {
+  it("change path after row click", async () => {
     // given
-    act(() => {
-      render(<BookOverview />, { wrapper });
-      jest.runAllTimers();
-    });
+    render(<BookOverview />, { wrapper: WrapperComponent });
     // when
-    return bookServiceMockPromise.then(() => {
-      const row = screen.getByText(/John Example/i).closest("tr");
-      row && fireEvent.click(row);
-      expect(screen.getByText(/Book Details Component/i)).toBeVisible();
-    });
+    const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
+    row && userEvent.click(row);
+    // then
+    expect(screen.getByText(/Authors:/i)).toBeInTheDocument();
+  });
+
+  it("updates a book row upon changes done in the details", async () => {
+    // given
+    render(<BookOverview />, { wrapper: WrapperComponent });
+    // when
+
+    const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
+    row && userEvent.click(row);
+    const newAuthor = "New Author";
+    const authors = screen.getByLabelText(/Authors:/i);
+    userEvent.clear(authors);
+    userEvent.type(authors, newAuthor);
+    const formSubmitBtn = screen.getByRole("button", { name: "Apply" });
+    formSubmitBtn && formSubmitBtn.click();
+    row?.querySelector("td");
+    const updatedAuthorCell = row?.querySelector("td");
+    expect(updatedAuthorCell).toHaveTextContent(newAuthor);
   });
 });
