@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useBookService } from "../../services/BooksService";
 import { BookProperties } from "../../book";
@@ -20,16 +20,16 @@ const ErrorMessage = ({ msg }: { msg: string }) => (
   <div style={{ color: "red" }}>{msg}</div>
 );
 
-interface ParamTypes {
+type ParamTypes = {
   id: string;
-}
+};
 
 const initBook: BookProperties = { title: "", authors: "" };
 
 export const BookDetails = () => {
   const { save, findOne } = useBookService();
   const { id } = useParams<ParamTypes>();
-  const { push } = useHistory();
+  const navigate = useNavigate();
   const { register, handleSubmit, errors, reset } = useForm({
     defaultValues: initBook,
   });
@@ -45,7 +45,7 @@ export const BookDetails = () => {
   }, [id]);
 
   const notifyOnBookChange = (data: BookProperties) => {
-    save({ id: +id, ...data }).then(() => push("/book-app/books"));
+    save({ id: +id!, ...data }).then(() => navigate("/book-app/books"));
   };
   return (
     <div>
