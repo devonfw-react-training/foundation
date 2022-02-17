@@ -15,34 +15,37 @@ const mockedResponseBooks: Book[] = [
     authors: "Frank Herbert",
     title: "Dune",
   },
-] 
+];
 
-const mockFetch = async function mockFetch(url: string, config: Record<string, any>) {
+const mockFetch = async function mockFetch(
+  url: string,
+  config: Record<string, any>,
+) {
   switch (url) {
     case getURI("books"): {
       return {
         ok: true,
-        json: async () => (mockedResponseBooks),
-      }
+        json: async () => mockedResponseBooks,
+      };
     }
     default: {
-      throw new Error(`Unhandled request: ${url}`)
+      throw new Error(`Unhandled request: ${url}`);
     }
   }
-}
+};
 
-  const WrapperComponent = ({ children }: any) => (
-    <BookContext.Provider value={useBooks()}>
-      {children}
-    </BookContext.Provider>
-  );
+const WrapperComponent = ({ children }: any) => (
+  <BookContext.Provider value={useBooks()}>{children}</BookContext.Provider>
+);
 
 describe("Book Overview Component with mocked http responses", () => {
   beforeAll(() => {
-    jest.spyOn(window, 'fetch')
+    jest.spyOn(window, "fetch");
     jest.spyOn(console, "error").mockImplementation(() => {});
-  })
-  beforeEach(async () => await (window.fetch as any).mockImplementation(mockFetch))
+  });
+  beforeEach(
+    async () => await (window.fetch as any).mockImplementation(mockFetch),
+  );
 
   it("renders the master table having three columns", () => {
     // given
@@ -60,11 +63,10 @@ describe("Book Overview Component with mocked http responses", () => {
   it("Renders books table with data received from server", async () => {
     // given
     expect.hasAssertions();
-    
+
     render(<BookOverview />, { wrapper: WrapperComponent });
     expect(await screen.findByText(/Julius Verne/i)).toBeInTheDocument();
     expect(await screen.findByText(/Frank Herbert/i)).toBeInTheDocument();
-      
   });
   it("renders details upon click on the row", async () => {
     // given
@@ -73,7 +75,7 @@ describe("Book Overview Component with mocked http responses", () => {
     const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
     row && userEvent.click(row);
     // then
-    expect(screen.getByText(/Authors:/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Authors/i)).toBeInTheDocument();
   });
 
   it("updates a book row upon changes done in the details", async () => {
@@ -84,14 +86,13 @@ describe("Book Overview Component with mocked http responses", () => {
     const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
     row && userEvent.click(row);
     const newAuthor = "New Author";
-    const authors = screen.getByLabelText(/Authors:/i);
+    const authors = screen.getByLabelText(/Authors/i);
     userEvent.clear(authors);
     userEvent.type(authors, newAuthor);
-    const formSubmitBtn = screen.getByRole("button", { name: "Apply" })
+    const formSubmitBtn = screen.getByRole("button", { name: "Apply" });
     formSubmitBtn && formSubmitBtn.click();
     row?.querySelector("td");
     const updatedAuthorCell = row?.querySelector("td");
     expect(updatedAuthorCell).toHaveTextContent(newAuthor);
-
   });
 });

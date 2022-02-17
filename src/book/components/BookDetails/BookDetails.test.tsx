@@ -25,10 +25,8 @@ describe("BookDetails", () => {
     // given
     render(<BookDetails book={currentBook} onBookChange={callbackMock} />);
     // when
-    const label = screen.getByText(/Authors:/i);
-    const authorsInput = screen.getByLabelText(/Authors:/i) as HTMLInputElement;
+    const authorsInput = screen.getByLabelText(/Authors/i) as HTMLInputElement;
     // then
-    expect(label).toBeInTheDocument();
     expect(authorsInput.value).toBe(currentBook.authors);
   });
 
@@ -36,10 +34,8 @@ describe("BookDetails", () => {
     // given
     render(<BookDetails book={currentBook} onBookChange={callbackMock} />);
     // when
-    const label = screen.getByText(/Title:/i);
-    const titleInput = screen.getByLabelText(/Title:/i) as HTMLInputElement;
+    const titleInput = screen.getByLabelText(/Title/i) as HTMLInputElement;
     // then
-    expect(label).toBeInTheDocument();
     expect(titleInput.value).toBe(currentBook.title);
   });
 });
