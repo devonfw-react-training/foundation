@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  act,
-  fireEvent,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./BookOverview";
 import { BookContext, getURI, useBooks } from "../../services/BooksService";
@@ -23,6 +17,12 @@ const mockedResponseBooks: Book[] = [
     title: "Dune",
   },
 ];
+
+const mockUseNavigate = jest.fn();
+jest.mock("react-router-dom", () => ({
+  ...(jest.requireActual("react-router-dom") as any),
+  useNavigate: () => mockUseNavigate,
+}));
 
 const mockFetch = async function mockFetch(
   url: string,
@@ -85,31 +85,16 @@ describe("Book Overview Component with mocked http responses", () => {
     expect(await screen.findByText(/Julius Verne/i)).toBeInTheDocument();
     expect(await screen.findByText(/Frank Herbert/i)).toBeInTheDocument();
   });
+
   it("change path after row click", async () => {
     // given
     render(<BookOverview />, { wrapper: WrapperComponent });
     // when
-    const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
+    const authorCell = await screen.findByText(/Julius Verne/i);
+    const row = authorCell.closest("tr");
     row && userEvent.click(row);
-    // then
-    expect(screen.getByText(/Authors:/i)).toBeInTheDocument();
-  });
-
-  it("updates a book row upon changes done in the details", async () => {
-    // given
-    render(<BookOverview />, { wrapper: WrapperComponent });
-    // when
-
-    const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
-    row && userEvent.click(row);
-    const newAuthor = "New Author";
-    const authors = screen.getByLabelText(/Authors:/i);
-    userEvent.clear(authors);
-    userEvent.type(authors, newAuthor);
-    const formSubmitBtn = screen.getByRole("button", { name: "Apply" });
-    formSubmitBtn && formSubmitBtn.click();
-    row?.querySelector("td");
-    const updatedAuthorCell = row?.querySelector("td");
-    expect(updatedAuthorCell).toHaveTextContent(newAuthor);
+    expect(mockUseNavigate).toHaveBeenCalled();
+    expect(mockUseNavigate).toHaveBeenCalledTimes(1);
+    expect(mockUseNavigate).toHaveBeenCalledWith("/book-app/book/1");
   });
 });
