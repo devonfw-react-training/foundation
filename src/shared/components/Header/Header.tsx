@@ -1,6 +1,6 @@
-import { Box, AppBar, Typography, Tabs, Tab } from "@mui/material";
 import { useState } from "react";
 import { NavLink } from "react-router-dom";
+import { Box, AppBar, Typography, Tabs, Tab } from "@mui/material";
 
 export const Header = () => {
   const [currentTab, setCurrentTab] = useState("/book-app/books");

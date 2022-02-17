@@ -1,3 +1,4 @@
+import React from "react";
 import { CircularProgress, Stack } from "@mui/material";
 
 export const Spinner = () => (
