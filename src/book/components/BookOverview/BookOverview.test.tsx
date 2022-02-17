@@ -41,7 +41,7 @@ describe("Book Overview Component", () => {
     const row = screen.getByText(/John Example/i).closest("tr");
     row && fireEvent.click(row);
     // then
-    expect(screen.getByText(/Authors:/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Authors/i)).toBeInTheDocument();
   });
 
   it("updates a book row upon changes done in the details", () => {
@@ -51,7 +51,7 @@ describe("Book Overview Component", () => {
     const row = screen.getByText(/John Example/i).closest("tr");
     row && fireEvent.click(row);
     const newAuthor = "New Author";
-    const authors = screen.getByLabelText(/Authors:/i);
+    const authors = screen.getByLabelText(/Authors/i);
     fireEvent.change(authors, { target: { value: newAuthor } });
     const form = authors.closest("form");
     form && fireEvent.submit(form, { preventDefault: jest.fn() });
