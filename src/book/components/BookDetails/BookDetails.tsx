@@ -1,9 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useBookService } from "../../services/BooksService";
 import { BookProperties } from "../../book";
-import { Label } from "./BookDetails.css";
+import { Stack, Button, TextField } from "@mui/material";
+import { Spinner } from "../../../shared/components/Sipnner/Spinner";
 
 interface ErrorMessages {
   required: string;
@@ -16,10 +17,6 @@ const errorMessages: ErrorMessages = {
   maxLength: "Your input exceed maximum length",
 };
 
-const ErrorMessage = ({ msg }: { msg: string }) => (
-  <div style={{ color: "red" }}>{msg}</div>
-);
-
 type ParamTypes = {
   id: string;
 };
@@ -27,6 +24,7 @@ type ParamTypes = {
 const initBook: BookProperties = { title: "", authors: "" };
 
 export const BookDetails = () => {
+  const [loading, setLoading] = useState(true);
   const { save, findOne } = useBookService();
   const { id } = useParams<ParamTypes>();
   const navigate = useNavigate();
@@ -38,58 +36,47 @@ export const BookDetails = () => {
     if (id) {
       findOne(+id).then((book) => {
         reset(book);
+        setLoading(false);
       });
     } else {
       reset(initBook);
+      setLoading(false);
     }
   }, [id]);
 
   const notifyOnBookChange = (data: BookProperties) => {
     save({ id: +id!, ...data }).then(() => navigate("/book-app/books"));
   };
+
+  if (loading) return <Spinner />;
+
   return (
-    <div>
-      <form onSubmit={handleSubmit(notifyOnBookChange)}>
-        <div className="form-group row">
-          <Label htmlFor="authors" className="col-sm-3 col-form-label">
-            Authors:
-          </Label>
-          <div className="col-sm-9">
-            <input
-              id="authors"
-              name="authors"
-              type="text"
-              className="form-control"
-              ref={register({ required: true })}
-            />
-            {errors.authors && (
-              <ErrorMessage msg={errorMessages[errors.authors.type]} />
-            )}
-          </div>
-        </div>
-        <div className="form-group row">
-          <Label htmlFor="title" className="col-sm-3 col-form-label">
-            Title:
-          </Label>
-          <div className="col-sm-9">
-            <input
-              id="title"
-              name="title"
-              type="text"
-              className="form-control"
-              ref={register({ required: true, maxLength: 15 })}
-            />
-            {errors.title && (
-              <ErrorMessage msg={errorMessages[errors.title.type]} />
-            )}
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="offset-sm-3 col-sm-9">
-            <button className="btn btn-primary">Apply</button>
-          </div>
-        </div>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit(notifyOnBookChange)}>
+      <Stack spacing={4} alignItems="center">
+        <TextField
+          id="authors"
+          name="authors"
+          label="Authors"
+          variant="outlined"
+          fullWidth
+          inputRef={register({ required: true })}
+          error={!!errors.authors}
+          helperText={errors.authors && errorMessages[errors.authors.type]}
+        />
+        <TextField
+          id="title"
+          name="title"
+          label="Title"
+          variant="outlined"
+          fullWidth
+          inputRef={register({ required: true, maxLength: 15 })}
+          error={!!errors.title}
+          helperText={errors.title && errorMessages[errors.title.type]}
+        />
+        <Button variant="contained" type="submit">
+          Apply
+        </Button>
+      </Stack>
+    </form>
   );
 };
