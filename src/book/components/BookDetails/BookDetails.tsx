@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Book } from "../../book";
-import { Card, CardContent, Typography, FormLabel } from "@mui/material";
+import { Label } from "./BookDetails.css";
 
 interface State {
   currentBook: Book;
@@ -19,16 +19,34 @@ export class BookDetails extends Component<Props, State> {
 
   render(): React.ReactNode {
     return (
-      <Card>
-        <CardContent>
-          <FormLabel>Authors:</FormLabel>
-          <Typography>{this.state.currentBook.authors}</Typography>
-        </CardContent>
-        <CardContent>
-          <FormLabel>Title:</FormLabel>
-          <Typography>{this.state.currentBook.title}</Typography>
-        </CardContent>
-      </Card>
+      <div className="container">
+        <form>
+          <div className="form-group row">
+            <Label className="col-sm-2 col-form-Label" htmlFor="authors">
+              Authors:
+            </Label>
+            <div className="col-sm-10">
+              <p className="form-control-plaintext" id="authors">
+                {this.state.currentBook.authors}
+              </p>
+            </div>
+          </div>
+          <div className="form-group row">
+            <Label className="col-sm-2 col-form-Label" htmlFor="title">
+              Title:
+            </Label>
+            <div className="col-sm-10">
+              <p
+                className="form-control-plaintext"
+                aria-label="title"
+                id="title"
+              >
+                {this.state.currentBook.title}
+              </p>
+            </div>
+          </div>
+        </form>
+      </div>
     );
   }
 }
