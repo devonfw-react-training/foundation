@@ -1,0 +1,24 @@
+{
+  "books": [
+    {
+      "id": 1,
+      "authors": "Joshua Bloch",
+      "title": "Effective Java, 2nd Edition"
+    },
+    {
+      "id": 2,
+      "authors": "Gavin King",
+      "title": "Java Persistence With Hibernate"
+    },
+    {
+      "id": 3,
+      "authors": "Douglas Crockford",
+      "title": "JavaScript: The Good Parts"
+    },
+    {
+      "id": 4,
+      "authors": "Kent Beck",
+      "title": "Test Driven Development"
+    }
+  ]
+}
