@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Book } from "../../book";
 import { BookDetails } from "../BookDetails/BookDetails";
+import {
+  Grid,
+  TableContainer,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
+} from "@mui/material";
 
 export interface Props {}
 
@@ -37,42 +47,45 @@ export const BookOverview = () => {
   };
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="col-md-8 col-12">
-          <table className="table table-hover">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Authors</th>
-                <th scope="col">Title</th>
-              </tr>
-            </thead>
-            <tbody>
+    <Grid container spacing={2}>
+      <Grid item md={8}>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>#</TableCell>
+                <TableCell>Authors</TableCell>
+                <TableCell>Title</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {books.map((book, index) => (
-                <tr
+                <TableRow
+                  hover
                   key={book.id}
-                  className={isBookSelected(book) ? "table-active" : ""}
                   onClick={() => selectBook(book)}
+                  selected={isBookSelected(book)}
                 >
-                  <th scope="row">{index + 1}</th>
-                  <td>{book.authors}</td>
-                  <td>{book.title}</td>
-                </tr>
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell>{book.authors}</TableCell>
+                  <TableCell>{book.title}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="col-md-4 col-12">
-          {selectedBook && (
-            <BookDetails
-              key={selectedBook.id}
-              book={selectedBook}
-              onBookChange={updateBook}
-            />
-          )}
-        </div>
-      </div>
-    </div>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Grid>
+      <Grid item md={4}>
+        {selectedBook && (
+          <BookDetails
+            key={selectedBook.id}
+            book={selectedBook}
+            onBookChange={updateBook}
+          />
+        )}
+      </Grid>
+    </Grid>
   );
 };
