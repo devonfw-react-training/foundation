@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, SyntheticEvent } from "react";
 import { Book } from "../../book";
-import { Label } from "./BookDetails.css";
+import { Stack, Button, Card, CardContent, TextField } from "@mui/material";
 
 export interface Props {
   book: Book;
@@ -22,44 +22,34 @@ export const BookDetails = (props: Props) => {
     }
   };
   return (
-    <div>
-      <form onSubmit={notifyOnBookChange}>
-        <div className="form-group row">
-          <Label htmlFor="authors" className="col-sm-3 col-form-label">
-            Authors:
-          </Label>
-          <div className="col-sm-9">
-            <input
+    <Card>
+      <CardContent>
+        <form onSubmit={notifyOnBookChange}>
+          <Stack spacing={4}>
+            <TextField
               id="authors"
               name="authors"
-              type="text"
-              className="form-control"
+              label="Authors"
+              variant="outlined"
+              fullWidth
               value={book.authors}
               onChange={handleChange}
             />
-          </div>
-        </div>
-        <div className="form-group row">
-          <Label htmlFor="title" className="col-sm-3 col-form-label">
-            Title:
-          </Label>
-          <div className="col-sm-9">
-            <input
+            <TextField
               id="title"
               name="title"
-              type="text"
-              className="form-control"
+              label="Title"
+              variant="outlined"
+              fullWidth
               value={book.title}
               onChange={handleChange}
             />
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="offset-sm-3 col-sm-9">
-            <button type="submit" name="apply" className="btn btn-primary">Apply</button>
-          </div>
-        </div>
-      </form>
-    </div>
+            <Button variant="contained" type="submit" name="apply">
+              Apply
+            </Button>
+          </Stack>
+        </form>
+      </CardContent>
+    </Card>
   );
 };
