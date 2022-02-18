@@ -2,7 +2,7 @@ import { useState, useEffect, ChangeEvent, SyntheticEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useBookService } from "../../services/BooksService";
 import { Book } from "../../book";
-import { Label } from "./BookDetails.css";
+import { Stack, Button, TextField } from "@mui/material";
 
 type ParamTypes = {
   id: string;
@@ -34,44 +34,30 @@ export const BookDetails = () => {
     save(book).then(() => navigate("/book-app/books"));
   };
   return (
-    <div>
-      <form onSubmit={notifyOnBookChange}>
-        <div className="form-group row">
-          <Label htmlFor="authors" className="col-sm-3 col-form-label">
-            Authors:
-          </Label>
-          <div className="col-sm-9">
-            <input
-              id="authors"
-              name="authors"
-              type="text"
-              className="form-control"
-              value={book.authors}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-        <div className="form-group row">
-          <Label htmlFor="title" className="col-sm-3 col-form-label">
-            Title:
-          </Label>
-          <div className="col-sm-9">
-            <input
-              id="title"
-              name="title"
-              type="text"
-              className="form-control"
-              value={book.title}
-              onChange={handleChange}
-            />
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="offset-sm-3 col-sm-9">
-            <button type="submit" name="apply" className="btn btn-primary">Apply</button>
-          </div>
-        </div>
-      </form>
-    </div>
+    <form onSubmit={notifyOnBookChange}>
+      <Stack spacing={4} alignItems="center">
+        <TextField
+          id="authors"
+          name="authors"
+          label="Authors"
+          variant="outlined"
+          fullWidth
+          value={book.authors}
+          onChange={handleChange}
+        />
+        <TextField
+          id="title"
+          name="title"
+          label="Title"
+          variant="outlined"
+          fullWidth
+          value={book.title}
+          onChange={handleChange}
+        />
+        <Button variant="contained" type="submit" name="apply">
+          Apply
+        </Button>
+      </Stack>
+    </form>
   );
 };
