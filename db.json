@@ -2,8 +2,8 @@
   "books": [
     {
       "id": 1,
-      "authors": "Joshua Blochsasas",
-      "title": "Effective Jav"
+      "authors": "Joshua Bloch",
+      "title": "Effective Java, 2nd Edition"
     },
     {
       "id": 2,
@@ -24,16 +24,6 @@
       "id": 5,
       "authors": "John Example 6 edited",
       "title": "Book 6 edited"
-    },
-    {
-      "authors": "asassa",
-      "title": "asas",
-      "id": 6
-    },
-    {
-      "authors": "ewwe",
-      "title": "wewe",
-      "id": 7
     }
   ],
   "users": [
@@ -66,24 +56,6 @@
       "password": "password",
       "email": "email@gmail.com",
       "id": 5
-    },
-    {
-      "username": "asads",
-      "password": "sadasdsd",
-      "email": "asdsdsd",
-      "id": 6
-    },
-    {
-      "username": "awewea",
-      "password": "aweawe",
-      "email": "aweaweaweaweawe",
-      "id": 7
-    },
-    {
-      "username": "wewe",
-      "password": "ewe",
-      "email": "wewe",
-      "id": 8
     }
   ]
 }
