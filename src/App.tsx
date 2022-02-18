@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Title } from "./App.css";
+import { Typography } from "@mui/material";
 
 interface State {
   title: string;
@@ -11,7 +11,11 @@ class App extends Component<Props, State> {
   state = { title: "Hello World!" };
 
   render() {
-    return <Title>{this.state.title}</Title>;
+    return (
+      <Typography variant="h1" color="primary">
+        {this.state.title}
+      </Typography>
+    );
   }
 }
 
