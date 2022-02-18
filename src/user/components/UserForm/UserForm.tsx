@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useUserService } from "../../services/UserService";
 import { UserProperties } from "../../user";
-import { Label } from "./UserForm.css";
+import { Stack, Button, TextField } from "@mui/material";
 
 interface ErrorMessages {
   required: string;
@@ -14,10 +14,6 @@ const errorMessages: ErrorMessages = {
   required: "This field is required",
   maxLength: "Your input exceed maximum length",
 };
-
-const ErrorMessage = ({ msg }: { msg: string }) => (
-  <div style={{ color: "red" }}>{msg}</div>
-);
 
 const initUser: UserProperties = { username: "", password: "", email: "" };
 
@@ -32,65 +28,42 @@ export const UserForm = () => {
     saveNew(data).then(() => navigate("/users/list"));
   };
   return (
-    <div>
-      <form onSubmit={handleSubmit(notifyOnUserChange)}>
-        <div className="form-group row">
-          <Label htmlFor="authors" className="col-sm-3 col-form-label">
-            Username:
-          </Label>
-          <div className="col-sm-9">
-            <input
-              id="username"
-              name="username"
-              type="text"
-              className="form-control"
-              ref={register({ required: true })}
-            />
-            {errors.username && (
-              <ErrorMessage msg={errorMessages[errors.username.type]} />
-            )}
-          </div>
-        </div>
-        <div className="form-group row">
-          <Label htmlFor="authors" className="col-sm-3 col-form-label">
-            Password:
-          </Label>
-          <div className="col-sm-9">
-            <input
-              id="password"
-              name="password"
-              type="password"
-              className="form-control"
-              ref={register({ required: true })}
-            />
-            {errors.password && (
-              <ErrorMessage msg={errorMessages[errors.password.type]} />
-            )}
-          </div>
-        </div>
-        <div className="form-group row">
-          <Label htmlFor="authors" className="col-sm-3 col-form-label">
-            Email:
-          </Label>
-          <div className="col-sm-9">
-            <input
-              id="email"
-              name="email"
-              type="text"
-              className="form-control"
-              ref={register({ required: true })}
-            />
-            {errors.email && (
-              <ErrorMessage msg={errorMessages[errors.email.type]} />
-            )}
-          </div>
-        </div>
-        <div className="form-group row">
-          <div className="offset-sm-3 col-sm-9">
-            <button className="btn btn-primary">Apply</button>
-          </div>
-        </div>
-      </form>
-    </div>
+    <form onSubmit={handleSubmit(notifyOnUserChange)}>
+      <Stack spacing={4} alignItems="center">
+        <TextField
+          id="username"
+          name="username"
+          label="Username"
+          variant="outlined"
+          fullWidth
+          inputRef={register({ required: true })}
+          error={!!errors.username}
+          helperText={errors.username && errorMessages[errors.username.type]}
+        />
+        <TextField
+          id="password"
+          name="password"
+          label="Password"
+          variant="outlined"
+          fullWidth
+          inputRef={register({ required: true })}
+          error={!!errors.password}
+          helperText={errors.password && errorMessages[errors.password.type]}
+        />
+        <TextField
+          id="email"
+          name="email"
+          label="Email"
+          variant="outlined"
+          fullWidth
+          inputRef={register({ required: true })}
+          error={!!errors.email}
+          helperText={errors.email && errorMessages[errors.email.type]}
+        />
+        <Button variant="contained" type="submit">
+          Apply
+        </Button>
+      </Stack>
+    </form>
   );
 };

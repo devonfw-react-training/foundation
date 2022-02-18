@@ -48,20 +48,35 @@ describe("Book Overview Component", () => {
     </BookContext.Provider>
   );
 
-  it("renders the master table having three columns", () => {
+  it("renders spinner before books are loaded", () => {
     // given
     act(() => {
       render(<BookOverview />, { wrapper });
       jest.runAllTimers();
     });
     // when
-    const noColumn = screen.getByText(/#/i);
-    const authorsColumn = screen.getByText(/Authors/i);
-    const titleColumn = screen.getByText(/Title/i);
+    const spinner = screen.getByTestId("spinner");
     // then
-    expect(noColumn).toBeInTheDocument();
-    expect(authorsColumn).toBeInTheDocument();
-    expect(titleColumn).toBeInTheDocument();
+    expect(spinner).toBeInTheDocument();
+  });
+
+  it("renders the master table having three columns", () => {
+    // given
+    expect.hasAssertions();
+    act(() => {
+      render(<BookOverview />, { wrapper });
+      jest.runAllTimers();
+    });
+    // when
+    return bookServiceMockPromise.then(() => {
+      const noColumn = screen.getByText(/#/i);
+      const authorsColumn = screen.getByText(/Authors/i);
+      const titleColumn = screen.getByText(/Title/i);
+      // then
+      expect(noColumn).toBeInTheDocument();
+      expect(authorsColumn).toBeInTheDocument();
+      expect(titleColumn).toBeInTheDocument();
+    });
   });
   it("renders the master table rows", async () => {
     // given
