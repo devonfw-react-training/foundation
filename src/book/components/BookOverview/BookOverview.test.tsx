@@ -48,7 +48,7 @@ describe("Book Overview Component", () => {
     </BookContext.Provider>
   );
 
-  it("renders spinner before books are load", () => {
+  it("renders spinner before books are loaded", () => {
     // given
     act(() => {
       render(<BookOverview />, { wrapper });
