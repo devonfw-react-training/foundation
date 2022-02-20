@@ -85,7 +85,6 @@ describe("BookDetails", () => {
   it("validates fields correctly", async () => {
     // given
     expect.hasAssertions();
-    const currentBook = mockedResponseBooks[1];
     render(<BookDetails />, { wrapper: WrapperComponent });
     // when
     const formSbtButton = await screen.findByRole("button", { name: "Apply" });
