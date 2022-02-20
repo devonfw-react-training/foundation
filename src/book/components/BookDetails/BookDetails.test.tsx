@@ -103,7 +103,6 @@ describe("BookDetails", () => {
       await screen.findByText("This field is required"),
     ).toBeInTheDocument();
 
-    //ts-ignore
     const randomLongTitle =
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut luctus dapibus neque in gravida. Etiam hendrerit cursus ipsum id placerat.";
 
