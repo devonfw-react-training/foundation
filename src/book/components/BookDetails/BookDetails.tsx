@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState, useEffect, ChangeEvent, SyntheticEvent } from "react";
 import { useBookService } from "../../services/BooksService";
-import { BookProperties } from "../../book";
+import { Book, BookProperties } from "../../book";
 import { Stack, Button, TextField } from "@mui/material";
 import { Spinner } from "../../../shared/components/Sipnner/Spinner";
 
@@ -11,10 +11,6 @@ interface ErrorMessages {
   maxLength: string;
   [key: string]: any;
 }
-
-type ParamTypes = {
-  id: string;
-};
 
 const errorMessages: ErrorMessages = {
   required: "This field is required",
@@ -35,7 +31,7 @@ export const BookDetails = () => {
   const { register, handleSubmit, errors, reset } = useForm({
     defaultValues: initBook,
   });
-  const [book, setBook] = useState<Book>(initBook);
+  const [book, setBook] = useState<Book>(initBook as Book);
 
   useEffect(() => {
     if (id) {
@@ -48,13 +44,6 @@ export const BookDetails = () => {
       setLoading(false);
     }
   }, [id]);
-
-  const notifyOnBookChange = (data: BookProperties) => {
-    save({ id: +id!, ...data }).then(() => navigate("/book-app/books"));
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.currentTarget;
-    setBook((prevBook) => ({ ...prevBook, [name]: value }));
-  };
 
   const notifyOnBookChange = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -82,7 +71,7 @@ export const BookDetails = () => {
           label="Title"
           variant="outlined"
           fullWidth
-          inputRef={register({ required: true, maxLength: 15 })}
+          inputRef={register({ required: true, maxLength: 50 })}
           error={!!errors.title}
           helperText={errors.title && errorMessages[errors.title.type]}
         />

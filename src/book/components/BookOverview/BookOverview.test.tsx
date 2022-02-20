@@ -1,10 +1,4 @@
-import {
-  render,
-  screen,
-  act,
-  fireEvent,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./BookOverview";
 import { BookContext, getURI, useBooks } from "../../services/BooksService";
@@ -76,21 +70,16 @@ describe("Book Overview Component with mocked http responses", () => {
 
   it("renders the master table having three columns", () => {
     // given
-    expect.hasAssertions();
-    act(() => {
-      render(<BookOverview />, { wrapper });
-      jest.runAllTimers();
-    });
+    render(<BookOverview />, { wrapper: WrapperComponent });
+
     // when
-    return bookServiceMockPromise.then(() => {
-      const noColumn = screen.getByText(/#/i);
-      const authorsColumn = screen.getByText(/Authors/i);
-      const titleColumn = screen.getByText(/Title/i);
-      // then
-      expect(noColumn).toBeInTheDocument();
-      expect(authorsColumn).toBeInTheDocument();
-      expect(titleColumn).toBeInTheDocument();
-    });
+    const noColumn = screen.getByText(/#/i);
+    const authorsColumn = screen.getByText(/Authors/i);
+    const titleColumn = screen.getByText(/Title/i);
+    // then
+    expect(noColumn).toBeInTheDocument();
+    expect(authorsColumn).toBeInTheDocument();
+    expect(titleColumn).toBeInTheDocument();
   });
   it("Renders books table with data received from server", async () => {
     // given
@@ -107,24 +96,6 @@ describe("Book Overview Component with mocked http responses", () => {
     const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
     row && userEvent.click(row);
     // then
-    expect(screen.getByText(/Authors:/i)).toBeInTheDocument();
-  });
-
-  it("updates a book row upon changes done in the details", async () => {
-    // given
-    render(<BookOverview />, { wrapper: WrapperComponent });
-    // when
-
-    const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
-    row && userEvent.click(row);
-    const newAuthor = "New Author";
-    const authors = screen.getByLabelText(/Authors:/i);
-    userEvent.clear(authors);
-    userEvent.type(authors, newAuthor);
-    const formSubmitBtn = screen.getByRole("button", { name: "Apply" });
-    formSubmitBtn && formSubmitBtn.click();
-    row?.querySelector("td");
-    const updatedAuthorCell = row?.querySelector("td");
-    expect(updatedAuthorCell).toHaveTextContent(newAuthor);
+    expect(screen.getByText(/Book Details Component/i)).toBeVisible();
   });
 });
