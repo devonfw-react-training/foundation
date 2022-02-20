@@ -25,13 +25,12 @@ const initBook: BookProperties = { title: "", authors: "" };
 
 export const BookDetails = () => {
   const [loading, setLoading] = useState(true);
-  const { save, findOne } = useBookService();
+  const { save, saveNew, findOne } = useBookService();
   const { id } = useParams<ParamTypes>();
   const navigate = useNavigate();
   const { register, handleSubmit, errors, reset } = useForm({
     defaultValues: initBook,
   });
-  const [book, setBook] = useState<Book>(initBook as Book);
 
   useEffect(() => {
     if (id) {
@@ -45,9 +44,16 @@ export const BookDetails = () => {
     }
   }, [id]);
 
-  const notifyOnBookChange = (e: SyntheticEvent) => {
-    e.preventDefault();
-    save(book).then(() => navigate("/book-app/books"));
+  const navigateToBookList = () => navigate("/book-app/books");
+
+  const notifyOnBookChange = (bookData: BookProperties) => {
+    if (id) {
+      //update book
+      save({ id: +id, ...bookData }).then(navigateToBookList);
+    } else {
+      //create new book
+      saveNew(bookData).then(navigateToBookList);
+    }
   };
 
   if (loading) return <Spinner />;
@@ -57,6 +63,7 @@ export const BookDetails = () => {
       <Stack spacing={4} alignItems="center">
         <TextField
           id="authors"
+          data-testid="authors"
           name="authors"
           label="Authors"
           variant="outlined"
@@ -67,6 +74,7 @@ export const BookDetails = () => {
         />
         <TextField
           id="title"
+          data-testid="authors"
           name="title"
           label="Title"
           variant="outlined"
