@@ -70,6 +70,7 @@ describe("Book Overview Component with mocked http responses", () => {
 
   it("renders the master table having three columns", async () => {
     // given
+    expect.hasAssertions();
     render(<BookOverview />, { wrapper: WrapperComponent });
 
     // when
