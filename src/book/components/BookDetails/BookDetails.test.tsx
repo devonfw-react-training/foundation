@@ -50,7 +50,6 @@ const WrapperComponent = ({ children }: any) => (
       <Routes>
         <Route path="/" element={children} />
         <Route path="/book-app/book/1" element={children} />
-        <Route path="/book-app/book/2" element={children} />
       </Routes>
     </MemoryRouter>
   </BookContext.Provider>
