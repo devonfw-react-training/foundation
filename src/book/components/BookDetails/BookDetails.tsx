@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState, useEffect, ChangeEvent, SyntheticEvent } from "react";
+import { useState, useEffect } from "react";
 import { useBookService } from "../../services/BooksService";
 import { Book, BookProperties } from "../../book";
 import { Stack, Button, TextField } from "@mui/material";

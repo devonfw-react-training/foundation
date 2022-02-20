@@ -68,14 +68,14 @@ describe("Book Overview Component with mocked http responses", () => {
     expect(spinner).toBeInTheDocument();
   });
 
-  it("renders the master table having three columns", () => {
+  it("renders the master table having three columns", async () => {
     // given
     render(<BookOverview />, { wrapper: WrapperComponent });
 
     // when
-    const noColumn = screen.getByText(/#/i);
-    const authorsColumn = screen.getByText(/Authors/i);
-    const titleColumn = screen.getByText(/Title/i);
+    const noColumn = await screen.findByText(/#/i);
+    const authorsColumn = await screen.findByText(/Authors/i);
+    const titleColumn = await screen.findByText(/Title/i);
     // then
     expect(noColumn).toBeInTheDocument();
     expect(authorsColumn).toBeInTheDocument();
