@@ -39,7 +39,6 @@ export const BookDetails = () => {
         setLoading(false);
       });
     } else {
-      console.log("nie znalazlem knigi", id);
       reset(initBook);
       setLoading(false);
     }
