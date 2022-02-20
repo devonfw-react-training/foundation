@@ -1,13 +1,9 @@
-import { render, screen, act } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import {
-  BookContext,
-  BookService,
-  getURI,
-  useBooks,
-} from "../../services/BooksService";
+import { BookContext } from "../../services/BooksService";
 import { Book } from "../../book";
 import { BookDetails } from "./BookDetails";
+import userEvent from "@testing-library/user-event";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -32,7 +28,7 @@ const useBooksMock = () => {
     findAll: async () => {
       return await mockedResponseBooks;
     },
-    findOne: async (id) => {
+    findOne: async () => {
       return await mockedResponseBooks[1];
     },
     save: async () => {
@@ -84,5 +80,40 @@ describe("BookDetails", () => {
     )) as HTMLInputElement;
     // then
     expect(titleInput.value).toBe(currentBook.title);
+  });
+
+  it("validates fields correctly", async () => {
+    // given
+    expect.hasAssertions();
+    const currentBook = mockedResponseBooks[1];
+    render(<BookDetails />, { wrapper: WrapperComponent });
+    // when
+    const formSbtButton = await screen.findByRole("button", { name: "Apply" });
+    const titleInput = (await screen.findByLabelText(
+      /Title/i,
+    )) as HTMLInputElement;
+    const authorsInput = (await screen.findByLabelText(
+      /Authors/i,
+    )) as HTMLInputElement;
+
+    userEvent.clear(authorsInput);
+    userEvent.click(formSbtButton);
+
+    // then
+    expect(
+      await screen.findByText("This field is required"),
+    ).toBeInTheDocument();
+
+    //ts-ignore
+    const randomLongTitle =
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut luctus dapibus neque in gravida. Etiam hendrerit cursus ipsum id placerat.";
+
+    userEvent.clear(titleInput);
+    userEvent.type(titleInput, randomLongTitle);
+    userEvent.click(formSbtButton);
+
+    expect(
+      await screen.findByText("Your input exceed maximum length"),
+    ).toBeInTheDocument();
   });
 });
