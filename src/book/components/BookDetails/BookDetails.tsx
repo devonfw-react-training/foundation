@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useState, useEffect, ChangeEvent, SyntheticEvent } from "react";
 import { useBookService } from "../../services/BooksService";
 import { BookProperties } from "../../book";
 import { Label } from "./BookDetails.css";
@@ -10,6 +10,10 @@ interface ErrorMessages {
   maxLength: string;
   [key: string]: any;
 }
+
+type ParamTypes = {
+  id: string;
+};
 
 const errorMessages: ErrorMessages = {
   required: "This field is required",
@@ -33,6 +37,7 @@ export const BookDetails = () => {
   const { register, handleSubmit, errors, reset } = useForm({
     defaultValues: initBook,
   });
+  const [book, setBook] = useState<Book>(initBook);
 
   useEffect(() => {
     if (id) {
@@ -46,6 +51,14 @@ export const BookDetails = () => {
 
   const notifyOnBookChange = (data: BookProperties) => {
     save({ id: +id!, ...data }).then(() => navigate("/book-app/books"));
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value, name } = e.currentTarget;
+    setBook((prevBook) => ({ ...prevBook, [name]: value }));
+  };
+
+  const notifyOnBookChange = (e: SyntheticEvent) => {
+    e.preventDefault();
+    save(book).then(() => navigate("/book-app/books"));
   };
   return (
     <div>
@@ -86,7 +99,7 @@ export const BookDetails = () => {
         </div>
         <div className="form-group row">
           <div className="offset-sm-3 col-sm-9">
-            <button className="btn btn-primary">Apply</button>
+            <button type="submit" name="apply" className="btn btn-primary">Apply</button>
           </div>
         </div>
       </form>
