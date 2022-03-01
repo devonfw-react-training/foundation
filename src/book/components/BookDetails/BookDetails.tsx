@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
 import { useBookService } from "../../services/BooksService";
-import { BookProperties } from "../../book";
+import { Book, BookProperties } from "../../book";
 import { Stack, Button, TextField } from "@mui/material";
 import { Spinner } from "../../../shared/components/Sipnner/Spinner";
 
@@ -38,14 +38,21 @@ export const BookDetails = () => {
         reset(book);
         setLoading(false);
       });
-    } else setLoading(false);
-  }, []);
-
-  const notifyOnBookChange = (data: BookProperties) => {
-    if (id) {
-      save({ id: +id, ...data }).then(() => navigate("/book-app/books"));
     } else {
-      saveNew(data).then(() => navigate("/book-app/books"));
+      reset(initBook);
+      setLoading(false);
+    }
+  }, [id]);
+
+  const navigateToBookList = () => navigate("/book-app/books");
+
+  const notifyOnBookChange = (bookData: BookProperties) => {
+    if (id) {
+      //update book
+      save({ id: +id, ...bookData }).then(navigateToBookList);
+    } else {
+      //create new book
+      saveNew(bookData).then(navigateToBookList);
     }
   };
 
@@ -56,6 +63,7 @@ export const BookDetails = () => {
       <Stack spacing={4} alignItems="center">
         <TextField
           id="authors"
+          data-testid="authors"
           name="authors"
           label="Authors"
           variant="outlined"
@@ -66,11 +74,12 @@ export const BookDetails = () => {
         />
         <TextField
           id="title"
+          data-testid="authors"
           name="title"
           label="Title"
           variant="outlined"
           fullWidth
-          inputRef={register({ required: true, maxLength: 15 })}
+          inputRef={register({ required: true, maxLength: 50 })}
           error={!!errors.title}
           helperText={errors.title && errorMessages[errors.title.type]}
         />

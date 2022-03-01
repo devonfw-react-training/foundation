@@ -28,7 +28,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "server": "npx json-server --port=8001 --watch db.json",
+    "server": "npx json-server --port=8000 --watch db.json",
     "gqlserver": "json-graphql-server db.json --p 5000",
     "build": "react-scripts build",
     "test": "react-scripts test",
