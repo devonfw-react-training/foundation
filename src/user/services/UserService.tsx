@@ -1,6 +1,5 @@
 import React, { createContext, useContext, FC } from "react";
 import { User, UserProperties } from "../user";
-// import { useUsers } from "./useUsers";
 import { useUsers } from "./useGQLItems";
 
 export interface UserService {
