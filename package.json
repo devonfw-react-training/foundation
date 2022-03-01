@@ -16,6 +16,8 @@
     "@types/react-dom": "^17.0.11",
     "@types/react-router-dom": "^5.3.3",
     "bootstrap": "^4.5.3",
+    "json-graphql-server": "^2.2.3",
+    "react-query": "^3.17.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-hook-form": "^6.13.1",
@@ -27,6 +29,7 @@
   "scripts": {
     "start": "react-scripts start",
     "server": "npx json-server --port=8000 --watch db.json",
+    "gqlserver": "json-graphql-server db.json --p 5000",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

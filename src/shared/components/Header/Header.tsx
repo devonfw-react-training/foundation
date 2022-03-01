@@ -28,6 +28,18 @@ export const Header = () => {
             to="/book-app/book"
             component={NavLink}
           />
+          <Tab
+            label="User list"
+            value="/users/list"
+            to="/users/list"
+            component={NavLink}
+          />
+          <Tab
+            label="New User"
+            value="/users/new"
+            to="/users/new"
+            component={NavLink}
+          />
         </Tabs>
       </AppBar>
     </Box>
