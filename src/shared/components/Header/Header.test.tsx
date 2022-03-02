@@ -9,7 +9,7 @@ describe("Header Component", () => {
     // when
     ReactDOM.render(
       <MemoryRouter>
-        <Header />
+        <Header toggleTheme={jest.fn()} />
       </MemoryRouter>,
       div,
     );

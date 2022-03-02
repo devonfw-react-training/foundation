@@ -1,10 +1,6 @@
+import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./book/components/BookOverview/BookOverview";
 import { BookDetails } from "./book/components/BookDetails/BookDetails";
 import { UserForm } from "./user/components/UserForm/UserForm";
@@ -13,7 +9,9 @@ import { UserList } from "./user/components/UserList/UserList";
 import { BookProvider } from "./book/services/BooksService";
 import { UserProvider } from "./user/services/UserService";
 import { Header } from "./shared/components/Header/Header";
-import { Container } from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
+import { theme } from "./shared/styles/theme";
+import { ThemeProvider } from "@mui/material/styles";
 
 export const AppRoutes = () => (
   <Routes>
@@ -26,19 +24,30 @@ export const AppRoutes = () => (
   </Routes>
 );
 
-const App = () => (
-  <BrowserRouter>
-    <QueryClientProvider client={new QueryClient()}>
-      <BookProvider>
-        <UserProvider>
-          <Header />
-          <Container>
-            <AppRoutes />
-          </Container>
-        </UserProvider>
-      </BookProvider>
-    </QueryClientProvider>
-  </BrowserRouter>
-);
+const App = () => {
+  const [currentTheme, setCurrentTheme] = useState<"light" | "dark">("light");
+
+  const toggleTheme = () => {
+    setCurrentTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
+  return (
+    <BrowserRouter>
+      <QueryClientProvider client={new QueryClient()}>
+        <ThemeProvider theme={theme[currentTheme]}>
+          <BookProvider>
+            <UserProvider>
+              <CssBaseline />
+              <Header toggleTheme={toggleTheme} />
+              <Container>
+                <AppRoutes />
+              </Container>
+            </UserProvider>
+          </BookProvider>
+        </ThemeProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
+  );
+};
 
 export default App;
