@@ -1,6 +1,7 @@
-import { useState, ChangeEvent, SyntheticEvent } from "react";
+import { useState, ChangeEvent, SyntheticEvent, useEffect } from "react";
 import { Book } from "../../book";
 import { Stack, Button, Card, CardContent, TextField } from "@mui/material";
+import { useBookService } from "../../services/BooksService";
 
 export interface Props {
   book: Book;
@@ -8,7 +9,11 @@ export interface Props {
 }
 
 export const BookDetails = (props: Props) => {
-  const [book, setBook] = useState<Book>({ ...props.book });
+  const [book, setBook] = useState<Book>({
+    authors: "",
+    title: "",
+  } as Book);
+  const { findOne, save } = useBookService();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.currentTarget;
@@ -17,10 +22,22 @@ export const BookDetails = (props: Props) => {
 
   const notifyOnBookChange = (e: SyntheticEvent) => {
     e.preventDefault();
-    if (props.onBookChange) {
-      props.onBookChange(book);
-    }
+    console.log("savesave", book);
+    save(book).then((savedBook) => {
+      props.onBookChange(savedBook);
+      console.log("book saved", savedBook);
+    });
   };
+
+  useEffect(() => {
+    const id = props.book.id;
+    if (id) {
+      findOne(id).then((book) => {
+        setBook(book);
+      });
+    }
+  }, []);
+
   return (
     <Card>
       <CardContent>
