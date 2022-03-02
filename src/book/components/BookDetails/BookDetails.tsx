@@ -1,8 +1,8 @@
 import { useState, useEffect, ChangeEvent, SyntheticEvent } from "react";
+import { Stack, Button, Card, CardContent, TextField } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useBookService } from "../../services/BooksService";
 import { Book } from "../../book";
-import { Stack, Button, TextField } from "@mui/material";
 
 type ParamTypes = {
   id: string;
@@ -33,31 +33,44 @@ export const BookDetails = () => {
     e.preventDefault();
     save(book).then(() => navigate("/book-app/books"));
   };
+
+  useEffect(() => {
+    if (id) {
+      findOne(+id).then((book) => {
+        setBook(book);
+      });
+    }
+  }, []);
+
   return (
-    <form onSubmit={notifyOnBookChange}>
-      <Stack spacing={4} alignItems="center">
-        <TextField
-          id="authors"
-          name="authors"
-          label="Authors"
-          variant="outlined"
-          fullWidth
-          value={book.authors}
-          onChange={handleChange}
-        />
-        <TextField
-          id="title"
-          name="title"
-          label="Title"
-          variant="outlined"
-          fullWidth
-          value={book.title}
-          onChange={handleChange}
-        />
-        <Button variant="contained" type="submit" name="apply">
-          Apply
-        </Button>
-      </Stack>
-    </form>
+    <Card>
+      <CardContent>
+        <form onSubmit={notifyOnBookChange}>
+          <Stack spacing={4}>
+            <TextField
+              id="authors"
+              name="authors"
+              label="Authors"
+              variant="outlined"
+              fullWidth
+              value={book.authors}
+              onChange={handleChange}
+            />
+            <TextField
+              id="title"
+              name="title"
+              label="Title"
+              variant="outlined"
+              fullWidth
+              value={book.title}
+              onChange={handleChange}
+            />
+            <Button variant="contained" type="submit" name="apply">
+              Apply
+            </Button>
+          </Stack>
+        </form>
+      </CardContent>
+    </Card>
   );
 };

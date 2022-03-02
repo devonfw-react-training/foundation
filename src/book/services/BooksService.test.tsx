@@ -26,7 +26,7 @@ const mockFetch = async function mockFetch(
   payload: HttpRequestConfig,
 ) {
   const method = (payload && payload.method) || "GET";
-  console.log("HTTP CONFIG CALL", url, payload);
+
   if (method === "GET" && url === getURI("books")) {
     return {
       ok: true,
