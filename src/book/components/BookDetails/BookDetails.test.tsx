@@ -1,5 +1,5 @@
 import { BookDetails } from "./BookDetails";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { BookContext } from "../../services/BooksService";
 import { Book } from "../../book";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
@@ -16,6 +16,11 @@ const mockedResponseBooks: Book[] = [
     title: "Dune",
   },
 ];
+
+jest.mock("react-router-dom", () => ({
+  ...(jest.requireActual("react-router-dom") as any),
+  useParams: () => ({ id: "1" }),
+}));
 
 const useBooksMock = () => {
   return {
@@ -39,6 +44,7 @@ const WrapperComponent = ({ children }: any) => (
     <MemoryRouter>
       <Routes>
         <Route path="/" element={children} />
+        <Route path="/book-app/book/1" element={children} />
       </Routes>
     </MemoryRouter>
   </BookContext.Provider>
