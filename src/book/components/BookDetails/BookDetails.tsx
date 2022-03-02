@@ -22,10 +22,8 @@ export const BookDetails = (props: Props) => {
 
   const notifyOnBookChange = (e: SyntheticEvent) => {
     e.preventDefault();
-    console.log("savesave", book);
     save(book).then((savedBook) => {
       props.onBookChange(savedBook);
-      console.log("book saved", savedBook);
     });
   };
 

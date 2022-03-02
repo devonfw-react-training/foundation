@@ -35,7 +35,6 @@ const mockFetch = async function mockFetch(
       };
     }
     case getURI("books/1"): {
-      console.log("ssss", url, payload);
       if (payload && payload.method === "PUT") {
         return {
           ok: true,
@@ -97,7 +96,7 @@ describe("Book Overview Component with mocked http responses", () => {
     expect(screen.getByLabelText(/Authors/i)).toBeInTheDocument();
   });
 
-  it.only("updates a book row upon changes done in the details", async () => {
+  it("updates a book row upon changes done in the details", async () => {
     // given
     render(<BookOverview />, { wrapper: WrapperComponent });
     // when
