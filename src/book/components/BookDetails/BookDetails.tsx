@@ -11,7 +11,7 @@ type ParamTypes = {
 const initBook = { id: NaN, title: "", authors: "" };
 
 export const BookDetails = () => {
-  const { save, findOne } = useBookService();
+  const { save, saveNew, findOne } = useBookService();
   const { id } = useParams<ParamTypes>();
   const navigate = useNavigate();
   const [book, setBook] = useState<Book>(initBook);
@@ -21,17 +21,27 @@ export const BookDetails = () => {
       findOne(+id).then((book) => {
         setBook(book);
       });
+    } else {
+      setBook(initBook);
     }
-  }, []);
+  }, [id]);
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.currentTarget;
     setBook((prevBook) => ({ ...prevBook, [name]: value }));
   };
 
+  const navigateToBookList = () => navigate("/book-app/books");
+
   const notifyOnBookChange = (e: SyntheticEvent) => {
     e.preventDefault();
-    save(book).then(() => navigate("/book-app/books"));
+    if (book.id) {
+      save(book).then(navigateToBookList);
+    } else {
+      saveNew({ authors: book.authors, title: book.title }).then(
+        navigateToBookList,
+      );
+    }
   };
 
   useEffect(() => {
@@ -39,6 +49,8 @@ export const BookDetails = () => {
       findOne(+id).then((book) => {
         setBook(book);
       });
+    } else {
+      setBook(initBook);
     }
   }, []);
 

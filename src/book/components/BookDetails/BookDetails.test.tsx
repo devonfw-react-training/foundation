@@ -17,6 +17,11 @@ const mockedResponseBooks: Book[] = [
   },
 ];
 
+jest.mock("react-router-dom", () => ({
+  ...(jest.requireActual("react-router-dom") as any),
+  useParams: () => ({ id: "1" }),
+}));
+
 const useBooksMock = () => {
   return {
     findAll: async () => {
@@ -39,6 +44,7 @@ const WrapperComponent = ({ children }: any) => (
     <MemoryRouter>
       <Routes>
         <Route path="/" element={children} />
+        <Route path="/book-app/book/1" element={children} />
       </Routes>
     </MemoryRouter>
   </BookContext.Provider>

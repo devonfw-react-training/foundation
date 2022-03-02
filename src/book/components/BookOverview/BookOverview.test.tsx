@@ -64,10 +64,7 @@ const WrapperComponent = ({ children }: any) => (
     <MemoryRouter>
       <Routes>
         <Route path="/" element={children} />
-        <Route
-          path="/book-app/book/1"
-          element={<div>Book Details Component</div>}
-        />
+        <Route path="/book-app/book/1" element={children} />
       </Routes>
     </MemoryRouter>
   </BookContext.Provider>
@@ -111,28 +108,10 @@ describe("Book Overview Component with mocked http responses", () => {
     const authorCell = await screen.findByText(/Julius Verne/i);
     const row = authorCell.closest("tr");
     row && userEvent.click(row);
+
+    //then
     expect(mockUseNavigate).toHaveBeenCalled();
     expect(mockUseNavigate).toHaveBeenCalledTimes(1);
     expect(mockUseNavigate).toHaveBeenCalledWith("/book-app/book/1");
-    // then
-    expect(screen.getByLabelText(/Authors/i)).toBeInTheDocument();
-  });
-
-  it("updates a book row upon changes done in the details", async () => {
-    // given
-    render(<BookOverview />, { wrapper: WrapperComponent });
-    // when
-
-    const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
-    row && userEvent.click(row);
-    const newAuthor = "New Author";
-
-    const authors = await screen.findByDisplayValue(/Julius Verne/);
-    userEvent.clear(authors);
-    userEvent.type(authors, newAuthor);
-    const formSubmitBtn = screen.getByRole("button", { name: "Apply" });
-    formSubmitBtn && formSubmitBtn.click();
-    const updatedAuthorCell = row?.querySelector("td");
-    await waitFor(() => expect(updatedAuthorCell).toHaveTextContent(newAuthor));
   });
 });
