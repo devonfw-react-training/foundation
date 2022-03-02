@@ -1,13 +1,17 @@
+import { Container } from "@mui/material";
 import { BookOverview } from "./book/components/BookOverview/BookOverview";
 import { BookProvider } from "./book/services/BooksService";
-import { Container } from "./App.css";
+import { Header } from "./shared/components/Header/Header";
 
 const App = () => (
-  <Container>
-    <BookProvider>
-      <BookOverview />
-    </BookProvider>
-  </Container>
+  <>
+    <Header />
+    <Container>
+      <BookProvider>
+        <BookOverview />
+      </BookProvider>
+    </Container>
+  </>
 );
 
 export default App;
