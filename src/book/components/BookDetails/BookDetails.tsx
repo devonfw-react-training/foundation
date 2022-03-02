@@ -2,9 +2,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { useBookService } from "../../services/BooksService";
-import { Book, BookProperties } from "../../book";
+import { BookProperties } from "../../book";
 import { Stack, Button, TextField } from "@mui/material";
 import { Spinner } from "../../../shared/components/Sipnner/Spinner";
+import { Save } from "@mui/icons-material";
 
 interface ErrorMessages {
   required: string;
@@ -83,7 +84,7 @@ export const BookDetails = () => {
           error={!!errors.title}
           helperText={errors.title && errorMessages[errors.title.type]}
         />
-        <Button variant="contained" type="submit">
+        <Button variant="contained" type="submit" endIcon={<Save />}>
           Apply
         </Button>
       </Stack>

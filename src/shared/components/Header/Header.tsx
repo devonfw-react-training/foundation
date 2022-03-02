@@ -2,6 +2,7 @@ import { FC, useState } from "react";
 import { Box, AppBar, Typography, Tabs, Tab, Grid } from "@mui/material";
 import { ThemeSwitch } from "../ThemeSwitch/ThemeSwitch";
 import { Link } from "../Link/Link";
+import { MenuBook } from "@mui/icons-material";
 
 interface Props {
   toggleTheme: () => void;
@@ -25,11 +26,12 @@ export const Header: FC<Props> = ({ toggleTheme }) => {
         >
           <Grid item>
             <Typography variant="h5" p={2} color="secondary">
+              <MenuBook fontSize="large" />
               Books App
             </Typography>
           </Grid>
           <Grid item mr={4}>
-            <ThemeSwitch color="secondary" onChange={toggleTheme} />
+            <ThemeSwitch onChange={toggleTheme} />
           </Grid>
         </Grid>
 

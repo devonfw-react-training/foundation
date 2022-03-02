@@ -1,6 +1,5 @@
-import React from "react";
 import { createTheme } from "@mui/material";
-import { lime, green, indigo } from "@mui/material/colors";
+import { lime, indigo, teal, cyan } from "@mui/material/colors";
 
 const lightTheme = createTheme({
   palette: {
@@ -21,10 +20,10 @@ const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: green[500],
+      main: teal[600],
     },
     secondary: {
-      main: "#009688",
+      main: cyan[500],
     },
   },
   typography: {
