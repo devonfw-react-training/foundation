@@ -44,16 +44,6 @@ export const BookDetails = () => {
     }
   };
 
-  useEffect(() => {
-    if (id) {
-      findOne(+id).then((book) => {
-        setBook(book);
-      });
-    } else {
-      setBook(initBook);
-    }
-  }, []);
-
   return (
     <Card>
       <CardContent>
