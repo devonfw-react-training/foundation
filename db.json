@@ -1,9 +1,6 @@
 {
   "books": [
     {
-      "id": 1
-    },
-    {
       "id": 2,
       "authors": "Gavin King",
       "title": "Java Persistence With Hibernate"

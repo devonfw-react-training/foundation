@@ -1,10 +1,5 @@
 import { QueryClient, QueryClientProvider } from "react-query";
-import {
-  BrowserRouter,
-  Navigate,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./book/components/BookOverview/BookOverview";
 import { BookDetails } from "./book/components/BookDetails/BookDetails";
 import { UserForm } from "./user/components/UserForm/UserForm";
@@ -14,6 +9,7 @@ import { BookProvider } from "./book/services/BooksService";
 import { UserProvider } from "./user/services/UserService";
 import { Header } from "./shared/components/Header/Header";
 import { Container } from "@mui/material";
+import { LoaderProvider } from "./book/services/LoaderService";
 
 export const AppRoutes = () => (
   <Routes>
@@ -29,14 +25,16 @@ export const AppRoutes = () => (
 const App = () => (
   <BrowserRouter>
     <QueryClientProvider client={new QueryClient()}>
-      <BookProvider>
-        <UserProvider>
-          <Header />
-          <Container>
-            <AppRoutes />
-          </Container>
-        </UserProvider>
-      </BookProvider>
+      <LoaderProvider>
+        <BookProvider>
+          <UserProvider>
+            <Header />
+            <Container>
+              <AppRoutes />
+            </Container>
+          </UserProvider>
+        </BookProvider>
+      </LoaderProvider>
     </QueryClientProvider>
   </BrowserRouter>
 );

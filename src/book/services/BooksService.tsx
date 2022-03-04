@@ -1,5 +1,6 @@
 import React, { createContext, useContext, FC } from "react";
 import { Book, BookProperties } from "../book";
+import { useLoaderService } from "./LoaderService";
 
 export const getURI = (endpoint: string) => `http://localhost:8000/${endpoint}`;
 const headers = {
@@ -16,8 +17,20 @@ export interface BookService {
 export const BookContext = createContext<BookService>({} as BookService);
 
 export const useBooks = () => {
+  const { startLoading, stopLoading, registerError } = useLoaderService();
+  // @ts-ignore
   const findAll: BookService["findAll"] = () => {
-    return fetch(getURI("books")).then((response) => response.json());
+    startLoading();
+    return fetch(getURI("books"))
+      .then((response) => response.json())
+      .then((books) => {
+        throw new Error("Ooops");
+        // stopLoading();
+        // return books;
+      })
+      .catch((e) => {
+        registerError(e);
+      });
   };
   const findOne: BookService["findOne"] = (id) => {
     return fetch(getURI(`books/${id}`)).then((response) => response.json());
