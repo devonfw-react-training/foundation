@@ -18,15 +18,39 @@ const mockedResponseBooks: Book[] = [
   },
 ];
 
+const mockUseNavigate = jest.fn();
+jest.mock("react-router-dom", () => ({
+  ...(jest.requireActual("react-router-dom") as any),
+  useNavigate: () => mockUseNavigate,
+}));
+
+interface HttpRequestConfig {
+  method: "GET" | "POST" | "PUT" | "DELETE";
+  headers: { "Content-Type": string };
+  body: any;
+}
+
 const mockFetch = async function mockFetch(
   url: string,
-  config: Record<string, any>,
+  payload: HttpRequestConfig,
 ) {
   switch (url) {
     case getURI("books"): {
       return {
         ok: true,
         json: async () => mockedResponseBooks,
+      };
+    }
+    case getURI("books/1"): {
+      if (payload && payload.method === "PUT") {
+        return {
+          ok: true,
+          json: async () => JSON.parse(payload.body),
+        };
+      }
+      return {
+        ok: true,
+        json: async () => mockedResponseBooks[0],
       };
     }
     default: {
@@ -40,10 +64,7 @@ const WrapperComponent = ({ children }: any) => (
     <MemoryRouter>
       <Routes>
         <Route path="/" element={children} />
-        <Route
-          path="/book-app/book/1"
-          element={<div>Book Details Component</div>}
-        />
+        <Route path="/book-app/book/1" element={children} />
       </Routes>
     </MemoryRouter>
   </BookContext.Provider>
@@ -90,11 +111,13 @@ describe("Book Overview Component with mocked http responses", () => {
     expect(await screen.findByText(/Julius Verne/i)).toBeInTheDocument();
     expect(await screen.findByText(/Frank Herbert/i)).toBeInTheDocument();
   });
+
   it("change path after row click", async () => {
     // given
     render(<BookOverview />, { wrapper: WrapperComponent });
     // when
-    const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
+    const authorCell = await screen.findByText(/Julius Verne/i);
+    const row = authorCell.closest("tr");
     row && userEvent.click(row);
     // then
     expect(screen.getByText(/Book Details Component/i)).toBeVisible();

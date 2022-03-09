@@ -1,10 +1,4 @@
-import {
-  BrowserRouter,
-  NavLink,
-  Navigate,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./book/components/BookOverview/BookOverview";
 import { BookDetails } from "./book/components/BookDetails/BookDetails";
 
