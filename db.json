@@ -1,7 +1,9 @@
 {
   "books": [
     {
-      "id": 1
+      "id": 1,
+      "authors": "Joshua Bloch",
+      "title": "Effective Java, 2nd Edition"
     },
     {
       "id": 2,
