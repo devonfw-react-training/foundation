@@ -1,9 +1,10 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./BookOverview";
 import { BookContext, getURI, useBooks } from "../../services/BooksService";
 import { Book } from "../../book";
 import userEvent from "@testing-library/user-event";
+import { BookDetails } from "../BookDetails/BookDetails";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -19,10 +20,10 @@ const mockedResponseBooks: Book[] = [
 ];
 
 const mockUseNavigate = jest.fn();
-jest.mock("react-router-dom", () => ({
-  ...(jest.requireActual("react-router-dom") as any),
-  useNavigate: () => mockUseNavigate,
-}));
+// jest.mock("react-router-dom", () => ({
+//   ...(jest.requireActual("react-router-dom") as any),
+//   useNavigate: () => mockUseNavigate,
+// }));
 
 interface HttpRequestConfig {
   method: "GET" | "POST" | "PUT" | "DELETE";
@@ -64,7 +65,7 @@ const WrapperComponent = ({ children }: any) => (
     <MemoryRouter>
       <Routes>
         <Route path="/" element={children} />
-        <Route path="/book-app/book/1" element={children} />
+        <Route path="/book-app/book/1" element={<BookDetails />} />
       </Routes>
     </MemoryRouter>
   </BookContext.Provider>
@@ -120,6 +121,6 @@ describe("Book Overview Component with mocked http responses", () => {
     const row = authorCell.closest("tr");
     row && userEvent.click(row);
     // then
-    expect(screen.getByText(/Book Details Component/i)).toBeVisible();
+    expect(await screen.findByTestId("book-details-form")).toBeVisible();
   });
 });
