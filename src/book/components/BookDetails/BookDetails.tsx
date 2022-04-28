@@ -59,7 +59,10 @@ export const BookDetails = () => {
   if (loading) return <Spinner />;
 
   return (
-    <form onSubmit={handleSubmit(notifyOnBookChange)}>
+    <form
+      onSubmit={handleSubmit(notifyOnBookChange)}
+      data-testid="book-details-form"
+    >
       <Stack spacing={4} alignItems="center">
         <TextField
           id="authors"
