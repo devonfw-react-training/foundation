@@ -18,13 +18,6 @@ const mockedResponseBooks: Book[] = [
     title: "Dune",
   },
 ];
-
-const mockUseNavigate = jest.fn();
-// jest.mock("react-router-dom", () => ({
-//   ...(jest.requireActual("react-router-dom") as any),
-//   useNavigate: () => mockUseNavigate,
-// }));
-
 interface HttpRequestConfig {
   method: "GET" | "POST" | "PUT" | "DELETE";
   headers: { "Content-Type": string };
