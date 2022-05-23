@@ -24,9 +24,9 @@ export const useBooks = () => {
     return fetch(getURI("books"))
       .then((response) => response.json())
       .then((books) => {
-        throw new Error("Ooops");
-        // stopLoading();
-        // return books;
+        // throw new Error("Ooops");
+        stopLoading();
+        return books;
       })
       .catch((e) => {
         registerError(e);
