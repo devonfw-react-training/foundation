@@ -1,9 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./BookOverview";
-import { BookContext, getURI, useBooks } from "../../services/BooksService";
+import {
+  BookContext,
+  BookProvider,
+  getURI,
+  useBooks,
+} from "../../services/BooksService";
 import { Book } from "../../book";
 import userEvent from "@testing-library/user-event";
+import { LoaderProvider } from "../../services/LoaderService";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -36,17 +42,19 @@ const mockFetch = async function mockFetch(
 };
 
 const WrapperComponent = ({ children }: any) => (
-  <BookContext.Provider value={useBooks()}>
-    <MemoryRouter>
-      <Routes>
-        <Route path="/" element={children} />
-        <Route
-          path="/book-app/book/1"
-          element={<div>Book Details Component</div>}
-        />
-      </Routes>
-    </MemoryRouter>
-  </BookContext.Provider>
+  <LoaderProvider>
+    <BookProvider>
+      <MemoryRouter>
+        <Routes>
+          <Route path="/" element={children} />
+          <Route
+            path="/book-app/book/1"
+            element={<div>Book Details Component</div>}
+          />
+        </Routes>
+      </MemoryRouter>
+    </BookProvider>
+  </LoaderProvider>
 );
 
 describe("Book Overview Component with mocked http responses", () => {
@@ -60,6 +68,7 @@ describe("Book Overview Component with mocked http responses", () => {
 
   it("renders spinner before books are loaded", () => {
     // given
+    expect.hasAssertions();
     render(<BookOverview />, { wrapper: WrapperComponent });
 
     // when
@@ -85,13 +94,15 @@ describe("Book Overview Component with mocked http responses", () => {
   it("Renders books table with data received from server", async () => {
     // given
     expect.hasAssertions();
-
     render(<BookOverview />, { wrapper: WrapperComponent });
+
+    //then
     expect(await screen.findByText(/Julius Verne/i)).toBeInTheDocument();
     expect(await screen.findByText(/Frank Herbert/i)).toBeInTheDocument();
   });
   it("change path after row click", async () => {
     // given
+    expect.hasAssertions();
     render(<BookOverview />, { wrapper: WrapperComponent });
     // when
     const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
