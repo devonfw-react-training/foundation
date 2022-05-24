@@ -44,7 +44,7 @@ export const useBooks = () => {
   };
 };
 
-export const BookProvider: FC = (props) => {
+export const BookProvider: FC<any> = (props) => {
   return (
     <BookContext.Provider value={useBooks()}>
       {props.children}
