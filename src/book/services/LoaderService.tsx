@@ -85,7 +85,7 @@ export const useLoader = (): LoaderService => {
 
 const LoaderContext = createContext<LoaderService>({} as LoaderService);
 
-export const LoaderProvider: FunctionComponent = ({ children }) => {
+export const LoaderProvider: FunctionComponent<any> = ({ children }) => {
   return (
     <LoaderContext.Provider value={useLoader()}>
       {children}
@@ -97,7 +97,7 @@ export const useLoaderService = () => {
   return useContext(LoaderContext);
 };
 
-export const BookLoader: FunctionComponent = ({ children }) => {
+export const BookLoader: FunctionComponent<any> = ({ children }) => {
   const { isLoading, loaderComponent, failuresCounter } = useLoaderService();
 
   if (failuresCounter)
