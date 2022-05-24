@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks";
 import { getURI, useBooks } from "./BooksService";
 import { Book } from "../book";
+import { LoaderProvider } from "./LoaderService";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -26,7 +27,6 @@ const mockFetch = async function mockFetch(
   payload: HttpRequestConfig,
 ) {
   const method = (payload && payload.method) || "GET";
-  console.log("HTTP CONFIG CALL", url, payload);
   if (method === "GET" && url === getURI("books")) {
     return {
       ok: true,
@@ -79,8 +79,12 @@ describe("BookService", () => {
     // given
     expect.hasAssertions();
     const bookToCheck = mockedResponseBooks[0];
+
+    const TestWrapper = ({ children }: { children: any }) => {
+      return <LoaderProvider>{children}</LoaderProvider>;
+    };
     // when
-    const { result } = renderHook(() => useBooks());
+    const { result } = renderHook(() => useBooks(), { wrapper: TestWrapper });
     // then
     const data = await result.current.findAll();
     expect(data[0].authors).toEqual(bookToCheck.authors);
