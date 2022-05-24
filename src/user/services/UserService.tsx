@@ -9,7 +9,7 @@ export interface UserService {
 
 export const UserContext = createContext<UserService>({} as UserService);
 
-export const UserProvider: FC = (props) => {
+export const UserProvider: FC<any> = (props) => {
   return (
     <UserContext.Provider value={useUsers()}>
       {props.children}
