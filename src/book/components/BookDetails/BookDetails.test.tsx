@@ -1,6 +1,7 @@
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { BookDetails } from "./BookDetails";
 import { render, screen } from "@testing-library/react";
+import { act } from "react-dom/test-utils";
 
 describe("BookDetails", () => {
   const currentBook = {
@@ -12,9 +13,13 @@ describe("BookDetails", () => {
     // given
     const div = document.createElement("div");
     // when
-    ReactDOM.render(<BookDetails book={currentBook} />, div);
-    // then no errors thrown
-    ReactDOM.unmountComponentAtNode(div);
+    // eslint-disable-next-line testing-library/no-unnecessary-act
+    act(() => {
+      const root = createRoot(div);
+      root.render(<BookDetails book={currentBook} />);
+      // then no errors thrown
+      root.unmount();
+    });
   });
 
   it("renders authors with a label", () => {

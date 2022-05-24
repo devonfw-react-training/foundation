@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import { Header } from "./Header";
 
@@ -7,8 +7,9 @@ describe("Header Component", () => {
     // given
     const div = document.createElement("div");
     // when
-    ReactDOM.render(<Header />, div);
+    const root = createRoot(div);
+    root.render(<Header />);
     // then no errors thrown
-    ReactDOM.unmountComponentAtNode(div);
+    root.unmount();
   });
 });

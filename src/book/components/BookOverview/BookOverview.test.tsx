@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import { BookOverview } from "./BookOverview";
 
@@ -20,8 +20,10 @@ describe("Book Overview Component", () => {
     // given
     const div = document.createElement("div");
     // when
-    ReactDOM.render(<BookOverview />, div);
+    const root = createRoot(div);
+    root.render(<BookOverview />);
+
     // then no errors thrown
-    ReactDOM.unmountComponentAtNode(div);
+    root.unmount();
   });
 });
