@@ -40,6 +40,14 @@ describe("BookService", () => {
     server.listen();
   });
 
+  afterAll(() => {
+    server.close();
+  });
+
+  afterEach(() => {
+    server.resetHandlers();
+  });
+
   it("finds all books'", async () => {
     // given
     expect.hasAssertions();
