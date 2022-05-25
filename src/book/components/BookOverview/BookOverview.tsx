@@ -38,19 +38,20 @@ export const BookOverview = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {books.map((book, index) => (
-              <TableRow
-                hover
-                key={book.id}
-                onClick={() => navigate(`/book-app/book/${book.id}`)}
-              >
-                <TableCell component="th" scope="row">
-                  {index + 1}
-                </TableCell>
-                <TableCell>{book.authors}</TableCell>
-                <TableCell>{book.title}</TableCell>
-              </TableRow>
-            ))}
+            {books &&
+              books.map((book, index) => (
+                <TableRow
+                  hover
+                  key={book.id}
+                  onClick={() => navigate(`/book-app/book/${book.id}`)}
+                >
+                  <TableCell component="th" scope="row">
+                    {index + 1}
+                  </TableCell>
+                  <TableCell>{book.authors}</TableCell>
+                  <TableCell>{book.title}</TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
