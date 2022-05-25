@@ -28,7 +28,12 @@ export const BookDetails = () => {
   const { save, saveNew, findOne } = useBookService();
   const { id } = useParams<ParamTypes>();
   const navigate = useNavigate();
-  const { register, handleSubmit, errors, reset } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
     defaultValues: initBook,
   });
 
@@ -58,6 +63,14 @@ export const BookDetails = () => {
 
   if (loading) return <Spinner />;
 
+  const { ref: authorRef, ...authorProps } = register("authors", {
+    required: true,
+  });
+  const { ref: titleRef, ...titleProps } = register("title", {
+    required: true,
+    maxLength: 50,
+  });
+
   return (
     <form
       onSubmit={handleSubmit(notifyOnBookChange)}
@@ -65,24 +78,24 @@ export const BookDetails = () => {
     >
       <Stack spacing={4} alignItems="center">
         <TextField
+          inputRef={authorRef}
+          {...authorProps}
           id="authors"
           data-testid="authors"
-          name="authors"
           label="Authors"
           variant="outlined"
           fullWidth
-          inputRef={register({ required: true })}
           error={!!errors.authors}
           helperText={errors.authors && errorMessages[errors.authors.type]}
         />
         <TextField
+          inputRef={titleRef}
+          {...titleProps}
           id="title"
-          data-testid="authors"
-          name="title"
+          data-testid="title"
           label="Title"
           variant="outlined"
           fullWidth
-          inputRef={register({ required: true, maxLength: 50 })}
           error={!!errors.title}
           helperText={errors.title && errorMessages[errors.title.type]}
         />
