@@ -23,7 +23,7 @@
     "react-scripts": "^5",
     "typescript": "^4",
     "web-vitals": "^0.2.4",
-    "msw": "^0.41.0",
+    "msw": "^0.41.0"
   },
   "scripts": {
     "start": "react-scripts start",
