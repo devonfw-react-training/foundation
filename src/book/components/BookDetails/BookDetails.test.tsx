@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { BookDetails } from "./BookDetails";
 import { render, screen } from "@testing-library/react";
 
@@ -11,10 +11,11 @@ describe("BookDetails", () => {
   it("renders without crashing", () => {
     // given
     const div = document.createElement("div");
+    const root = createRoot(div!);
     // when
-    ReactDOM.render(<BookDetails book={currentBook} />, div);
+    root.render(<BookDetails book={currentBook} />);
     // then no errors thrown
-    ReactDOM.unmountComponentAtNode(div);
+    root.unmount();
   });
 
   it("renders authors with a label", () => {
