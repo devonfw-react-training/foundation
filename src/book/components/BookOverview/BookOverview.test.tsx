@@ -1,4 +1,4 @@
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BookOverview } from "./BookOverview";
 
@@ -6,10 +6,11 @@ describe("Book Overview Component", () => {
   it("renders without crashing", () => {
     // given
     const div = document.createElement("div");
+    const root = createRoot(div!);
     // when
-    ReactDOM.render(<BookOverview />, div);
+    root.render(<BookOverview />);
     // then no errors thrown
-    ReactDOM.unmountComponentAtNode(div);
+    root.unmount();
   });
 
   it("renders the master table having three columns", () => {

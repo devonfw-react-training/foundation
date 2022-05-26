@@ -1,14 +1,14 @@
-import ReactDOM from "react-dom";
-
+import { createRoot } from "react-dom/client";
 import { Header } from "./Header";
 
 describe("Header Component", () => {
   it("renders without crashing", () => {
     // given
     const div = document.createElement("div");
+    const root = createRoot(div!);
     // when
-    ReactDOM.render(<Header />, div);
+    root.render(<Header />);
     // then no errors thrown
-    ReactDOM.unmountComponentAtNode(div);
+    root.unmount();
   });
 });
