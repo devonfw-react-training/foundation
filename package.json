@@ -16,7 +16,6 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-router-dom": "^5",
-    "bootstrap": "^4.5.3",
     "msw": "^0.41.0",
     "react": "^18",
     "react-dom": "^18",
