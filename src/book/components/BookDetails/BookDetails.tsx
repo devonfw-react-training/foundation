@@ -2,7 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { useBookService } from "../../services/BooksService";
-import { Book, BookProperties } from "../../book";
+import { BookProperties } from "../../book";
 import { Stack, Button, TextField } from "@mui/material";
 import { Spinner } from "../../../shared/components/Sipnner/Spinner";
 
