@@ -16,7 +16,6 @@ export interface BookService {
 export const BookContext = createContext<BookService>({} as BookService);
 
 export const useBooks = () => {
-
   const findAll: BookService["findAll"] = () => {
     return fetch(getURI("books")).then((response) => response.json());
   };
@@ -45,11 +44,9 @@ export const useBooks = () => {
   };
 };
 
-export const BookProvider: FC = (props) => {
+export const BookProvider: FC<any> = ({ children }) => {
   return (
-    <BookContext.Provider value={useBooks()}>
-      {props.children}
-    </BookContext.Provider>
+    <BookContext.Provider value={useBooks()}>{children}</BookContext.Provider>
   );
 };
 export const useBookService = () => {

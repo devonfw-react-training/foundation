@@ -1,5 +1,5 @@
 import { BookDetails } from "./BookDetails";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import { BookContext } from "../../services/BooksService";
 import { Book } from "../../book";
 
@@ -51,7 +51,7 @@ describe("BookDetails", () => {
       /Authors/i,
     )) as HTMLInputElement;
     // then
-    expect(authorsInput.value).toBe(currentBook.authors);
+    await waitFor(() => expect(authorsInput.value).toBe(currentBook.authors));
   });
 
   it("renders a title with a label", async () => {
@@ -67,6 +67,6 @@ describe("BookDetails", () => {
       /Title/i,
     )) as HTMLInputElement;
     // then
-    expect(titleInput.value).toBe(currentBook.title);
+    await waitFor(() => expect(titleInput.value).toBe(currentBook.title));
   });
 });

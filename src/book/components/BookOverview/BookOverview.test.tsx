@@ -93,7 +93,7 @@ describe("Book Overview Component with mocked http responses", () => {
     const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
     row && userEvent.click(row);
     // then
-    expect(screen.getByLabelText(/Authors/i)).toBeInTheDocument();
+    expect(await screen.findByLabelText(/Authors/i)).toBeInTheDocument();
   });
 
   it("updates a book row upon changes done in the details", async () => {

@@ -1,6 +1,8 @@
 import { renderHook } from "@testing-library/react-hooks";
 import { getURI, useBooks } from "./BooksService";
 import { Book } from "../book";
+import { rest } from "msw";
+import { setupServer } from "msw/node";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -15,65 +17,36 @@ const mockedResponseBooks: Book[] = [
   },
 ];
 
-interface HttpRequestConfig {
-  method: "GET" | "POST" | "PUT" | "DELETE";
-  headers: { "Content-Type": string };
-  body: any;
-}
+const bookToSave = { id: 1, authors: "New author", title: "New title" };
+const newBookToSave = { authors: "Some author", title: "Some title" };
 
-const mockFetch = async function mockFetch(
-  url: string,
-  payload: HttpRequestConfig,
-) {
-  const method = (payload && payload.method) || "GET";
-
-  if (method === "GET" && url === getURI("books")) {
-    return {
-      ok: true,
-      json: async () => mockedResponseBooks,
-    };
-  }
-
-  if (
-    method === "GET" &&
-    new RegExp(`^${getURI("books")}/([0-9])$`).test(url)
-  ) {
-    const id = +url.split(`${getURI("books")}/`)[1];
-    return {
-      ok: true,
-      json: async () => mockedResponseBooks.find((book) => book.id === id),
-    };
-  }
-
-  if (
-    method === "PUT" &&
-    new RegExp(`^${getURI("books")}/([0-9])$`).test(url)
-  ) {
-    return {
-      ok: true,
-      json: async () => JSON.parse(payload.body),
-    };
-  }
-
-  if (method === "POST" && new RegExp(`^${getURI("books")}`).test(url)) {
-    const body = JSON.parse(payload.body);
-    return {
-      ok: true,
-      json: async () => ({ ...body, id: mockedResponseBooks.length + 1 }),
-    };
-  }
-
-  throw new Error(`Unhandled request: ${url}`);
-};
+const server = setupServer(
+  rest.get(getURI("books"), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mockedResponseBooks));
+  }),
+  rest.get(getURI(`books/${mockedResponseBooks[0].id}`), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mockedResponseBooks[0]));
+  }),
+  rest.put(getURI(`books/${bookToSave.id}`), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(bookToSave));
+  }),
+  rest.post(getURI("books"), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ ...newBookToSave, id: 3 }));
+  }),
+);
 
 describe("BookService", () => {
   beforeAll(() => {
-    jest.spyOn(window, "fetch");
-    jest.spyOn(console, "error").mockImplementation(() => {});
+    server.listen();
   });
-  beforeEach(
-    async () => await (window.fetch as any).mockImplementation(mockFetch),
-  );
+
+  afterAll(() => {
+    server.close();
+  });
+
+  afterEach(() => {
+    server.resetHandlers();
+  });
 
   it("finds all books'", async () => {
     // given
@@ -105,7 +78,6 @@ describe("BookService", () => {
   it("updates an existing book", async () => {
     // given
     expect.hasAssertions();
-    const bookToSave = { id: 1, authors: "New author", title: "New title" };
 
     // when
     const { result } = renderHook(() => useBooks());
@@ -119,14 +91,14 @@ describe("BookService", () => {
 
   it("saves a new book", async () => {
     // given
-    const bookToSave = { authors: "Some author", title: "Some title" };
+
     // when
     const { result } = renderHook(() => useBooks());
     const savedBook = await result.current.saveNew(bookToSave);
 
     //then
     expect(savedBook.id).toBeDefined();
-    expect(savedBook.authors).toBe(bookToSave.authors);
-    expect(savedBook.title).toBe(bookToSave.title);
+    expect(savedBook.authors).toBe(newBookToSave.authors);
+    expect(savedBook.title).toBe(newBookToSave.title);
   });
 });
