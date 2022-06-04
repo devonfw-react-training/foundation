@@ -1,12 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./BookOverview";
-import {
-  BookContext,
-  BookProvider,
-  getURI,
-  useBooks,
-} from "../../services/BooksService";
+import { BookProvider, getURI } from "../../services/BooksService";
 import { Book } from "../../book";
 import userEvent from "@testing-library/user-event";
 import { LoaderProvider } from "../../services/LoaderService";

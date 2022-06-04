@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { Container } from "@mui/material";
 import { BookOverview } from "./book/components/BookOverview/BookOverview";
 import { BookDetails } from "./book/components/BookDetails/BookDetails";
 import { UserForm } from "./user/components/UserForm/UserForm";
@@ -8,7 +9,6 @@ import { UserList } from "./user/components/UserList/UserList";
 import { BookProvider } from "./book/services/BooksService";
 import { UserProvider } from "./user/services/UserService";
 import { Header } from "./shared/components/Header/Header";
-import { Container } from "@mui/material";
 import { LoaderProvider } from "./book/services/LoaderService";
 
 export const AppRoutes = () => (
