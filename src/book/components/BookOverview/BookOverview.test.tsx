@@ -108,7 +108,6 @@ describe("Book Overview Component with mocked http responses", () => {
     const authorCell = await screen.findByText(/Julius Verne/i);
     const row = authorCell.closest("tr");
     row && userEvent.click(row);
-
     //then
     expect(mockUseNavigate).toHaveBeenCalled();
     expect(mockUseNavigate).toHaveBeenCalledTimes(1);

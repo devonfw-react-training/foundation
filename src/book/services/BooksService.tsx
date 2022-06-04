@@ -44,11 +44,9 @@ export const useBooks = () => {
   };
 };
 
-export const BookProvider: FC<any> = (props) => {
+export const BookProvider: FC<any> = ({ children }) => {
   return (
-    <BookContext.Provider value={useBooks()}>
-      {props.children}
-    </BookContext.Provider>
+    <BookContext.Provider value={useBooks()}>{children}</BookContext.Provider>
   );
 };
 export const useBookService = () => {

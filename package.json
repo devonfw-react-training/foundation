@@ -16,6 +16,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-router-dom": "^5",
+    "msw": "^0.41.0",
     "react": "^18",
     "react-dom": "^18",
     "react-router-dom": "^6",
@@ -36,7 +37,8 @@
       "react-app/jest"
     ],
     "rules": {
-      "react-hooks/exhaustive-deps": "off"
+      "react-hooks/exhaustive-deps": "off",
+      "testing-library/no-node-access": "off"
     }
   },
   "browserslist": {
