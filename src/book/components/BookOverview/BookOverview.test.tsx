@@ -114,6 +114,6 @@ describe("Book Overview Component with mocked http responses", () => {
     const row = authorCell.closest("tr");
     row && userEvent.click(row);
     // then
-    expect(await screen.findByTestId("book-details-form")).toBeVisible();
+    expect(await screen.findByLabelText(/Authors/i)).toBeInTheDocument();
   });
 });
