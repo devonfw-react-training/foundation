@@ -116,22 +116,4 @@ describe("Book Overview Component with mocked http responses", () => {
     // then
     expect(await screen.findByLabelText(/Authors/i)).toBeInTheDocument();
   });
-
-  it("updates a book row upon changes done in the details", async () => {
-    // given
-    render(<BookOverview />, { wrapper: WrapperComponent });
-    // when
-
-    const row = (await screen.findByText(/Julius Verne/i)).closest("tr");
-    row && userEvent.click(row);
-    const newAuthor = "New Author";
-
-    const authors = await screen.findByDisplayValue(/Julius Verne/);
-    userEvent.clear(authors);
-    userEvent.type(authors, newAuthor);
-    const formSubmitBtn = screen.getByRole("button", { name: "Apply" });
-    formSubmitBtn && formSubmitBtn.click();
-    const updatedAuthorCell = row?.querySelector("td");
-    await waitFor(() => expect(updatedAuthorCell).toHaveTextContent(newAuthor));
-  });
 });
