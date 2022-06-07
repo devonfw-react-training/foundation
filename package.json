@@ -9,7 +9,6 @@
     "@mui/material": "^5",
     "@testing-library/jest-dom": "^5",
     "@testing-library/react": "^13",
-    "@testing-library/react-hooks": "^8",
     "@testing-library/user-event": "^12",
     "@types/jest": "^26.0.15",
     "@types/node": "^12.0.0",
