@@ -1,5 +1,4 @@
-import { act, render, screen } from "@testing-library/react";
-import { renderHook } from "@testing-library/react-hooks";
+import { act, render, screen, renderHook } from "@testing-library/react";
 import { useLoader } from "./LoaderService";
 
 describe("Loder service", () => {
