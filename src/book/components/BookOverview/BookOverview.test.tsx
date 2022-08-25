@@ -1,8 +1,10 @@
 import { MemoryRouter, Route, Routes } from "react-router-dom";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { BookOverview } from "./BookOverview";
 import { BookContext, getURI, useBooks } from "../../services/BooksService";
 import { Book } from "../../book";
+import { rest } from "msw";
+import { setupServer } from "msw/node";
 import userEvent from "@testing-library/user-event";
 
 const mockedResponseBooks: Book[] = [
@@ -18,46 +20,23 @@ const mockedResponseBooks: Book[] = [
   },
 ];
 
+const server = setupServer(
+  rest.get(getURI("books"), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mockedResponseBooks));
+  }),
+  rest.get(getURI(`books/${mockedResponseBooks[0].id}`), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(mockedResponseBooks[0]));
+  }),
+  rest.put(getURI(`books/${mockedResponseBooks[0].id}`), (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json(req.body));
+  }),
+);
+
 const mockUseNavigate = jest.fn();
 jest.mock("react-router-dom", () => ({
   ...(jest.requireActual("react-router-dom") as any),
   useNavigate: () => mockUseNavigate,
 }));
-
-interface HttpRequestConfig {
-  method: "GET" | "POST" | "PUT" | "DELETE";
-  headers: { "Content-Type": string };
-  body: any;
-}
-
-const mockFetch = async function mockFetch(
-  url: string,
-  payload: HttpRequestConfig,
-) {
-  switch (url) {
-    case getURI("books"): {
-      return {
-        ok: true,
-        json: async () => mockedResponseBooks,
-      };
-    }
-    case getURI("books/1"): {
-      if (payload && payload.method === "PUT") {
-        return {
-          ok: true,
-          json: async () => JSON.parse(payload.body),
-        };
-      }
-      return {
-        ok: true,
-        json: async () => mockedResponseBooks[0],
-      };
-    }
-    default: {
-      throw new Error(`Unhandled request: ${url}`);
-    }
-  }
-};
 
 const WrapperComponent = ({ children }: any) => (
   <BookContext.Provider value={useBooks()}>
@@ -72,12 +51,16 @@ const WrapperComponent = ({ children }: any) => (
 
 describe("Book Overview Component with mocked http responses", () => {
   beforeAll(() => {
-    jest.spyOn(window, "fetch");
-    jest.spyOn(console, "error").mockImplementation(() => {});
+    server.listen();
   });
-  beforeEach(
-    async () => await (window.fetch as any).mockImplementation(mockFetch),
-  );
+
+  afterAll(() => {
+    server.close();
+  });
+
+  afterEach(() => {
+    server.resetHandlers();
+  });
 
   it("renders the master table having three columns", () => {
     // given
