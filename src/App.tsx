@@ -1,5 +1,5 @@
 import { Component } from "react";
-import { Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 interface State {
   title: string;
@@ -12,9 +12,14 @@ class App extends Component<Props, State> {
 
   render() {
     return (
-      <Typography variant="h1" color="primary">
-        {this.state.title}
-      </Typography>
+      <Box>
+        <Typography variant="h1" color="primary">
+          {this.state.title}
+        </Typography>
+        <Button onClick={() => this.setState({ title: "New Title" })}>
+          Change title
+        </Button>
+      </Box>
     );
   }
 }
