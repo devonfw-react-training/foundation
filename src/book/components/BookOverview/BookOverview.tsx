@@ -71,11 +71,7 @@ export const BookOverview = () => {
       </Grid>
       <Grid item md={4}>
         {selectedBook && (
-          <BookDetails
-            key={selectedBook.id}
-            book={selectedBook}
-            onBookChange={updateBook}
-          />
+          <BookDetails onBookChange={updateBook} bookId={selectedBook.id} />
         )}
       </Grid>
     </Grid>

@@ -43,9 +43,12 @@ describe("BookDetails", () => {
     expect.hasAssertions();
     const currentBook = mockedResponseBooks[1];
     const callbackMock = jest.fn();
-    render(<BookDetails book={currentBook} onBookChange={callbackMock} />, {
-      wrapper: WrapperComponent,
-    });
+    render(
+      <BookDetails bookId={currentBook.id} onBookChange={callbackMock} />,
+      {
+        wrapper: WrapperComponent,
+      },
+    );
     // when
     const authorsInput = (await screen.findByLabelText(
       /Authors/i,
@@ -59,9 +62,12 @@ describe("BookDetails", () => {
     expect.hasAssertions();
     const currentBook = mockedResponseBooks[1];
     const callbackMock = jest.fn();
-    render(<BookDetails book={currentBook} onBookChange={callbackMock} />, {
-      wrapper: WrapperComponent,
-    });
+    render(
+      <BookDetails bookId={currentBook.id} onBookChange={callbackMock} />,
+      {
+        wrapper: WrapperComponent,
+      },
+    );
     // when
     const titleInput = (await screen.findByLabelText(
       /Title/i,
