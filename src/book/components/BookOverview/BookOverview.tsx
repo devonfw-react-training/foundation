@@ -26,7 +26,6 @@ export const BookOverview = () => {
   }, []);
   const selectBook = (book: Book): void => {
     setSelectedBook(book);
-    console.log("select book", book);
   };
   const isBookSelected = (book: Book): boolean => book === selectedBook;
 
@@ -36,7 +35,6 @@ export const BookOverview = () => {
         book.id === bookToUpdate.id ? bookToUpdate : book,
       ),
     );
-    console.log("update book");
     setSelectedBook(bookToUpdate);
   };
 
