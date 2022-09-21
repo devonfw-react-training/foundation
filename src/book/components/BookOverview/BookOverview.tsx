@@ -25,8 +25,8 @@ export const BookOverview = () => {
     findAll().then((books: Book[]) => setBooks(books));
   }, []);
   const selectBook = (book: Book): void => {
-    console.log("click once");
     setSelectedBook(book);
+    console.log("select book", book);
   };
   const isBookSelected = (book: Book): boolean => book === selectedBook;
 
@@ -36,6 +36,7 @@ export const BookOverview = () => {
         book.id === bookToUpdate.id ? bookToUpdate : book,
       ),
     );
+    console.log("update book");
     setSelectedBook(bookToUpdate);
   };
 
@@ -72,11 +73,7 @@ export const BookOverview = () => {
       </Grid>
       <Grid item md={4}>
         {selectedBook && (
-          <BookDetails
-            key={selectedBook.id}
-            bookId={selectedBook.id}
-            onBookChange={updateBook}
-          />
+          <BookDetails onBookChange={updateBook} bookId={selectedBook.id} />
         )}
       </Grid>
     </Grid>
