@@ -2,7 +2,7 @@
   "books": [
     {
       "id": 1,
-      "authors": "Joshua Blochig77",
+      "authors": "Joshua Bloch",
       "title": "Effective Java, 2nd Edition"
     },
     {
