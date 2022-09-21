@@ -25,6 +25,7 @@ export const BookOverview = () => {
     findAll().then((books: Book[]) => setBooks(books));
   }, []);
   const selectBook = (book: Book): void => {
+    console.log("click once");
     setSelectedBook(book);
   };
   const isBookSelected = (book: Book): boolean => book === selectedBook;
@@ -73,7 +74,7 @@ export const BookOverview = () => {
         {selectedBook && (
           <BookDetails
             key={selectedBook.id}
-            book={selectedBook}
+            bookId={selectedBook.id}
             onBookChange={updateBook}
           />
         )}

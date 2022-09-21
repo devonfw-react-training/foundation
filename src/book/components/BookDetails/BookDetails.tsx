@@ -4,11 +4,11 @@ import { Stack, Button, Card, CardContent, TextField } from "@mui/material";
 import { useBookService } from "../../services/BooksService";
 
 export interface Props {
-  book: Book;
+  bookId: number;
   onBookChange: (book: Book) => void;
 }
 
-export const BookDetails = (props: Props) => {
+export const BookDetails = ({ bookId, onBookChange }: Props) => {
   const [book, setBook] = useState<Book>({
     authors: "",
     title: "",
@@ -23,18 +23,17 @@ export const BookDetails = (props: Props) => {
   const notifyOnBookChange = (e: SyntheticEvent) => {
     e.preventDefault();
     save(book).then((savedBook) => {
-      props.onBookChange(savedBook);
+      onBookChange(savedBook);
     });
   };
 
   useEffect(() => {
-    const id = props.book.id;
-    if (id) {
-      findOne(id).then((book) => {
-        setBook(book);
+    if (bookId) {
+      findOne(bookId).then((newBook) => {
+        setBook(newBook);
       });
     }
-  }, []);
+  }, [bookId]);
 
   return (
     <Card>
