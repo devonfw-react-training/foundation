@@ -1,12 +1,13 @@
 import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { BookOverview } from "./BookOverview";
-import { BookContext, getURI, useBooks } from "../../services/BooksService";
+import { BookProvider, getURI } from "../../services/BooksService";
 import { Book } from "../../book";
 import userEvent from "@testing-library/user-event";
 import { BookDetails } from "../BookDetails/BookDetails";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
+import { LoaderProvider } from "../../../shared/services/LoaderService";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -34,14 +35,16 @@ const server = setupServer(
 );
 
 const WrapperComponent = ({ children }: any) => (
-  <BookContext.Provider value={useBooks()}>
-    <MemoryRouter>
-      <Routes>
-        <Route path="/" element={children} />
-        <Route path="/book-app/book/1" element={<BookDetails />} />
-      </Routes>
-    </MemoryRouter>
-  </BookContext.Provider>
+  <LoaderProvider>
+    <BookProvider>
+      <MemoryRouter>
+        <Routes>
+          <Route path="/" element={children} />
+          <Route path="/book-app/book/1" element={<BookDetails />} />
+        </Routes>
+      </MemoryRouter>
+    </BookProvider>
+  </LoaderProvider>
 );
 
 describe("Book Overview Component with mocked http responses", () => {

@@ -5,6 +5,7 @@ import { BookDetails } from "./book/components/BookDetails/BookDetails";
 import { BookProvider } from "./book/services/BooksService";
 import { Header } from "./shared/components/Header/Header";
 import { Container } from "@mui/material";
+import { LoaderProvider } from "./shared/services/LoaderService";
 
 export const AppRoutes = () => (
   <Routes>
@@ -17,12 +18,14 @@ export const AppRoutes = () => (
 
 const App = () => (
   <BrowserRouter>
-    <BookProvider>
-      <Header />
-      <Container>
-        <AppRoutes />
-      </Container>
-    </BookProvider>
+    <LoaderProvider>
+      <BookProvider>
+        <Header />
+        <Container>
+          <AppRoutes />
+        </Container>
+      </BookProvider>
+    </LoaderProvider>
   </BrowserRouter>
 );
 
