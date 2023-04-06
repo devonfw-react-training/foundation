@@ -1,34 +1,26 @@
-import React, { Component } from "react";
+import { useState } from "react";
 import { Book } from "../../book";
 import { Card, CardContent, Typography, FormLabel } from "@mui/material";
 
-interface State {
-  currentBook: Book;
-}
-
-export interface Props {}
-
-export class BookDetails extends Component<Props, State> {
-  state: State = {
-    currentBook: {
-      id: 1,
-      title: "Example Book",
-      authors: "John Example",
-    },
+export const BookDetails = () => {
+  const initialBook = {
+    id: 1,
+    title: "Example Book",
+    authors: "John Example",
   };
 
-  render(): React.ReactNode {
-    return (
-      <Card>
-        <CardContent>
-          <FormLabel>Authors:</FormLabel>
-          <Typography>{this.state.currentBook.authors}</Typography>
-        </CardContent>
-        <CardContent>
-          <FormLabel>Title:</FormLabel>
-          <Typography>{this.state.currentBook.title}</Typography>
-        </CardContent>
-      </Card>
-    );
-  }
-}
+  const [currentBook] = useState<Book>(initialBook);
+
+  return (
+    <Card>
+      <CardContent>
+        <FormLabel>Authors:</FormLabel>
+        <Typography>{currentBook.authors}</Typography>
+      </CardContent>
+      <CardContent>
+        <FormLabel>Title:</FormLabel>
+        <Typography>{currentBook.title}</Typography>
+      </CardContent>
+    </Card>
+  );
+};
