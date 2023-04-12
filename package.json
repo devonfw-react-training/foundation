@@ -21,7 +21,7 @@
     "react-hook-form": "^7",
     "react-query": "^3.17.2",
     "msw": "^0.41.0",
-    "react-router-dom": "^6",
+    "react-router-dom": "^6.4",
     "react-scripts": "^5",
     "typescript": "^4",
     "web-vitals": "^0.2.4"
