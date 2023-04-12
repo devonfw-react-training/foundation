@@ -1,4 +1,10 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import {
+  Navigate,
+  Outlet,
+  RouterProvider,
+  createBrowserRouter,
+  useLocation,
+} from "react-router-dom";
 import { BookOverview } from "./book/components/BookOverview/BookOverview";
 import { BookDetails } from "./book/components/BookDetails/BookDetails";
 
@@ -6,24 +12,43 @@ import { BookProvider } from "./book/services/BooksService";
 import { Header } from "./shared/components/Header/Header";
 import { Container } from "@mui/material";
 
-export const AppRoutes = () => (
-  <Routes>
-    <Route path="/" element={<Navigate to="/book-app/books" replace />} />
-    <Route path="/book-app/books" element={<BookOverview />} />
-    <Route path="/book-app/book" element={<BookDetails />} />
-    <Route path="/book-app/book/:id" element={<BookDetails />} />
-  </Routes>
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />,
+    children: [
+      {
+        path: "/book-app/books",
+        element: <BookOverview />,
+      },
+      {
+        path: "/book-app/book",
+        element: <BookDetails />,
+      },
+      {
+        path: "/book-app/book/:id",
+        element: <BookDetails />,
+      },
+    ],
+  },
+]);
 
-const App = () => (
-  <BrowserRouter>
-    <BookProvider>
-      <Header />
-      <Container>
-        <AppRoutes />
-      </Container>
-    </BookProvider>
-  </BrowserRouter>
-);
+const App = () => <RouterProvider router={router} />;
+
+function Root() {
+  const { pathname } = useLocation();
+
+  return (
+    <>
+      {pathname === "/" ? <Navigate to="/book-app/books" /> : null}
+      <BookProvider>
+        <Header />
+        <Container>
+          <Outlet />
+        </Container>
+      </BookProvider>
+    </>
+  );
+}
 
 export default App;
