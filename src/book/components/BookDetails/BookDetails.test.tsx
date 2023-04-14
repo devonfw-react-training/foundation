@@ -2,6 +2,7 @@ import { BookDetails } from "./BookDetails";
 import { render, screen, waitFor } from "@testing-library/react";
 import { BookContext } from "../../services/BooksService";
 import { Book } from "../../book";
+import { vi } from "vitest";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -42,7 +43,7 @@ describe("BookDetails", () => {
     // given
     expect.hasAssertions();
     const currentBook = mockedResponseBooks[1];
-    const callbackMock = jest.fn();
+    const callbackMock = vi.fn();
     render(
       <BookDetails bookId={currentBook.id} onBookChange={callbackMock} />,
       {
@@ -61,7 +62,7 @@ describe("BookDetails", () => {
     // given
     expect.hasAssertions();
     const currentBook = mockedResponseBooks[1];
-    const callbackMock = jest.fn();
+    const callbackMock = vi.fn();
     render(
       <BookDetails bookId={currentBook.id} onBookChange={callbackMock} />,
       {
