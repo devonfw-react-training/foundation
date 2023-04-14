@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { BookDetails } from "./BookDetails";
 import { render, screen, waitFor } from "@testing-library/react";
+import { vi } from "vitest";
 
 describe("BookDetails", () => {
   const currentBook = {
@@ -8,7 +9,7 @@ describe("BookDetails", () => {
     title: "Example Book",
     authors: "John Example",
   };
-  const callbackMock = jest.fn();
+  const callbackMock = vi.fn();
   it("renders without crashing", () => {
     // given
     const div = document.createElement("div");

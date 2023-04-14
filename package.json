@@ -10,11 +10,16 @@
     "test": "vitest --config ./vitest.config.ts"
   },
   "dependencies": {
+    "react": "^18",
+    "react-dom": "^18",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5",
     "@mui/material": "^5",
-    "@testing-library/jest-dom": "^5"
+    "@testing-library/jest-dom": "^5",
+    "@testing-library/react": "^14",
+    "@testing-library/react-hooks": "^8",
+    "@testing-library/user-event": "^12"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",
