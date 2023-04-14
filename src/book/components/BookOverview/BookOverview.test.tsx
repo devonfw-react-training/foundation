@@ -1,6 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { BookOverview } from "./BookOverview";
+import { vi } from "vitest";
 
 describe("Book Overview Component", () => {
   it("renders without crashing", () => {
@@ -55,7 +56,7 @@ describe("Book Overview Component", () => {
     const authors = screen.getByLabelText(/Authors/i);
     fireEvent.change(authors, { target: { value: newAuthor } });
     const form = authors.closest("form");
-    form && fireEvent.submit(form, { preventDefault: jest.fn() });
+    form && fireEvent.submit(form, { preventDefault: vi.fn() });
     row?.querySelector("td");
     const updatedAuthorCell = row?.querySelector("td");
     expect(updatedAuthorCell).toHaveTextContent(newAuthor);
