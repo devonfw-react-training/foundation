@@ -4,6 +4,7 @@ import { BookContext } from "../../services/BooksService";
 import { Book } from "../../book";
 import { BookDetails } from "./BookDetails";
 import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -18,10 +19,13 @@ const mockedResponseBooks: Book[] = [
   },
 ];
 
-jest.mock("react-router-dom", () => ({
-  ...(jest.requireActual("react-router-dom") as any),
-  useParams: () => ({ id: "1" }),
-}));
+vi.mock("react-router-dom", async () => {
+  const actual = (await vi.importActual("react-router-dom")) as any;
+  return {
+    ...actual,
+    useParams: () => ({ id: "1" }),
+  };
+});
 
 const useBooksMock = () => {
   return {
@@ -52,10 +56,6 @@ const WrapperComponent = ({ children }: any) => (
 );
 
 describe("BookDetails", () => {
-  beforeAll(() => {
-    jest.spyOn(console, "error").mockImplementation(() => {});
-  });
-
   it("renders authors with a label", async () => {
     // given
     expect.hasAssertions();
