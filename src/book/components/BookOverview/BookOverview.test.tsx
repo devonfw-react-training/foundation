@@ -6,6 +6,7 @@ import { Book } from "../../book";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
 import userEvent from "@testing-library/user-event";
+import { vi } from "vitest";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -32,11 +33,15 @@ const server = setupServer(
   }),
 );
 
-const mockUseNavigate = jest.fn();
-jest.mock("react-router-dom", () => ({
-  ...(jest.requireActual("react-router-dom") as any),
-  useNavigate: () => mockUseNavigate,
-}));
+const mockUseNavigate = vi.fn();
+
+vi.mock("react-router-dom", async () => {
+  const actual = (await vi.importActual("react-router-dom")) as any;
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
 
 const WrapperComponent = ({ children }: any) => (
   <BookContext.Provider value={useBooks()}>

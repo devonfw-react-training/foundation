@@ -3,6 +3,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { BookContext } from "../../services/BooksService";
 import { Book } from "../../book";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
+import { vi } from "vitest";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -17,10 +18,13 @@ const mockedResponseBooks: Book[] = [
   },
 ];
 
-jest.mock("react-router-dom", () => ({
-  ...(jest.requireActual("react-router-dom") as any),
-  useParams: () => ({ id: "1" }),
-}));
+vi.mock("react-router-dom", async () => {
+  const actual = (await vi.importActual("react-router-dom")) as any;
+  return {
+    ...actual,
+    useParams: () => ({ id: "1" }),
+  };
+});
 
 const useBooksMock = () => {
   return {
