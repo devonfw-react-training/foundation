@@ -1,58 +1,41 @@
 {
-  "name": "foundations-2021",
-  "version": "0.1.0",
+  "name": "foundations-react",
+  "version": "1.0.0",
   "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest --config ./vitest.config.ts",
+    "server": "npx json-server --port=8000 --watch db.json",
+    "gqlserver": "json-graphql-server db.json --p 5000"
+  },
   "dependencies": {
+    "react": "^18",
+    "react-dom": "^18",
+    "react-router-dom": "^6.4",
+    "react-hook-form": "^7",
+    "react-query": "^3.17.2",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5",
     "@mui/material": "^5",
+    "msw": "^1.2.1",
     "@testing-library/jest-dom": "^5",
-    "@testing-library/react": "^13",
-    "@testing-library/user-event": "^12",
-    "@types/jest": "^26.0.15",
-    "@types/node": "^12.0.0",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@testing-library/react": "^14",
+    "@testing-library/react-hooks": "^8",
+    "@testing-library/user-event": "^12"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
     "@types/react-router-dom": "^5",
+    "@vitejs/plugin-react": "^4.0.0-beta.0",
     "json-graphql-server": "^2.2.3",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-hook-form": "^7",
-    "react-query": "^3.17.2",
-    "msw": "^0.41.0",
-    "react-router-dom": "^6.4",
-    "react-scripts": "^5",
-    "typescript": "^4",
-    "web-vitals": "^0.2.4"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "server": "npx json-server --port=8000 --watch db.json",
-    "gqlserver": "json-graphql-server db.json --p 5000",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ],
-    "rules": {
-      "react-hooks/exhaustive-deps": "off"
-    }
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+    "jsdom": "^21.1.1",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.0-beta.2",
+    "vitest": "^0.30.1"
   }
 }

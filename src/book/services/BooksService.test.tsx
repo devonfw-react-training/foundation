@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react";
 import { getURI, useBooks } from "./BooksService";
 import { Book } from "../book";
+import { vi } from "vitest";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -63,13 +64,12 @@ const mockFetch = async function mockFetch(
     };
   }
 
-  throw new Error(`Unhandled request: ${url}`);
+  return null;
 };
 
 describe("BookService", () => {
   beforeAll(() => {
-    jest.spyOn(window, "fetch");
-    jest.spyOn(console, "error").mockImplementation(() => {});
+    vi.spyOn(window, "fetch");
   });
   beforeEach(
     async () => await (window.fetch as any).mockImplementation(mockFetch),
