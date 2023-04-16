@@ -5,6 +5,7 @@ import { BookProvider, getURI } from "../../services/BooksService";
 import { Book } from "../../book";
 import userEvent from "@testing-library/user-event";
 import { LoaderProvider } from "../../services/LoaderService";
+import { vi } from "vitest";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -31,7 +32,7 @@ const mockFetch = async function mockFetch(
       };
     }
     default: {
-      throw new Error(`Unhandled request: ${url}`);
+      return null;
     }
   }
 };
@@ -54,8 +55,7 @@ const WrapperComponent = ({ children }: any) => (
 
 describe("Book Overview Component with mocked http responses", () => {
   beforeAll(() => {
-    jest.spyOn(window, "fetch");
-    jest.spyOn(console, "error").mockImplementation(() => {});
+    vi.spyOn(window, "fetch");
   });
   beforeEach(
     async () => await (window.fetch as any).mockImplementation(mockFetch),

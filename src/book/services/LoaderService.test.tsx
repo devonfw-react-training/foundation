@@ -1,13 +1,14 @@
 import { act, render, screen, renderHook } from "@testing-library/react";
 import { useLoader } from "./LoaderService";
+import { vi } from "vitest";
 
 describe("Loder service", () => {
   beforeAll(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it("not loading at start", () => {
@@ -31,7 +32,7 @@ describe("Loder service", () => {
     // when
     act(() => result.current.startLoading());
     act(() => result.current.stopLoading());
-    act(() => jest.runAllTimers() as any);
+    act(() => vi.runAllTimers() as any);
     // then
     expect(result.current.isLoading).toBe(false);
   });

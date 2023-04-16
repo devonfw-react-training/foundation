@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useBookService } from "../../services/BooksService";
 import { BookProperties } from "../../book";
 import { Stack, Button, TextField } from "@mui/material";
-import { Spinner } from "../../../shared/components/Sipnner/Spinner";
+import { Spinner } from "../../../shared/components/Spinner/Spinner";
 
 interface ErrorMessages {
   required: string;
