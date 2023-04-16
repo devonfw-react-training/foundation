@@ -1,13 +1,14 @@
 import { renderHook, act } from "@testing-library/react";
 import { useLoader } from "./LoaderService";
+import { vi } from "vitest";
 
 describe("LoaderService", () => {
   beforeAll(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterAll(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   it("is not loading initially", () => {
@@ -35,7 +36,7 @@ describe("LoaderService", () => {
     act(() => {
       result.current.startLoading();
       result.current.stopLoading();
-      jest.runAllTimers();
+      vi.runAllTimers();
     });
     // then
     expect(result.current.isLoading).toBeFalsy();
