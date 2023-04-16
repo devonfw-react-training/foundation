@@ -10,7 +10,7 @@ import {
   TableBody,
   Paper,
 } from "@mui/material";
-import { Spinner } from "../../../shared/components/Sipnner/Spinner";
+import { Spinner } from "../../../shared/components/Spinner/Spinner";
 
 export interface Props {}
 
