@@ -11,7 +11,6 @@ import { BookDetails } from "./book/components/BookDetails/BookDetails";
 import { BookProvider } from "./book/services/BooksService";
 import { Header } from "./shared/components/Header/Header";
 import { Container } from "@mui/material";
-import { LoaderProvider } from "./shared/services/LoaderService";
 
 const router = createBrowserRouter([
   {
@@ -42,14 +41,12 @@ function Root() {
   return (
     <>
       {pathname === "/" ? <Navigate to="/book-app/books" /> : null}
-      <LoaderProvider>
-        <BookProvider>
-          <Header />
-          <Container>
-            <Outlet />
-          </Container>
-        </BookProvider>
-      </LoaderProvider>
+      <BookProvider>
+        <Header />
+        <Container>
+          <Outlet />
+        </Container>
+      </BookProvider>
     </>
   );
 }
