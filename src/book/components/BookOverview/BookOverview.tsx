@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Book } from "../../book";
 import { useBookService } from "../../services/BooksService";
@@ -11,7 +11,8 @@ import {
   TableBody,
   Paper,
 } from "@mui/material";
-import { Loader } from "../../../shared/services/LoaderService";
+import { useLoader } from "../../../shared/hooks/useLoader";
+import { Loader } from "../../../shared/components/Loader/Loader";
 
 export interface Props {}
 
@@ -20,14 +21,15 @@ export const BookOverview = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
+  const fetchBooks = () =>
     findAll().then((books: Book[]) => {
       setBooks(books);
     });
-  }, []);
+
+  const loaderState = useLoader(fetchBooks);
 
   return (
-    <Loader>
+    <Loader {...loaderState}>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

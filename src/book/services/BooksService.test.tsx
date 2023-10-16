@@ -3,7 +3,6 @@ import { getURI, useBooks } from "./BooksService";
 import { Book } from "../book";
 import { rest } from "msw";
 import { setupServer } from "msw/node";
-import { LoaderProvider } from "../../shared/services/LoaderService";
 
 const mockedResponseBooks: Book[] = [
   {
@@ -54,9 +53,7 @@ describe("BookService", () => {
     expect.hasAssertions();
     const bookToCheck = mockedResponseBooks[0];
     // when
-    const { result } = renderHook(() => useBooks(), {
-      wrapper: LoaderProvider,
-    });
+    const { result } = renderHook(() => useBooks());
     // then
     const data = await result.current.findAll();
     expect(data[0].authors).toEqual(bookToCheck.authors);
