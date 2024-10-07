@@ -3,7 +3,7 @@ import { render, screen } from "@testing-library/react";
 import { BookOverview } from "./BookOverview";
 import { BookContext, getURI, useBooks } from "../../services/BooksService";
 import { Book } from "../../book";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
@@ -22,15 +22,19 @@ const mockedResponseBooks: Book[] = [
 ];
 
 const server = setupServer(
-  rest.get(getURI("books"), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(mockedResponseBooks));
+  http.get(getURI("books"), () => {
+    return HttpResponse.json(mockedResponseBooks);
   }),
-  rest.get(getURI(`books/${mockedResponseBooks[0].id}`), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(mockedResponseBooks[0]));
+  http.get(getURI(`books/${mockedResponseBooks[0].id}`), () => {
+    return HttpResponse.json(mockedResponseBooks[0]);
   }),
-  rest.put(getURI(`books/${mockedResponseBooks[0].id}`), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(req.body));
-  }),
+  http.put(
+    getURI(`books/${mockedResponseBooks[0].id}`),
+    async ({ request }) => {
+      const body = await request.json();
+      return HttpResponse.json(body);
+    },
+  ),
 );
 
 const mockUseNavigate = vi.fn();
@@ -95,7 +99,7 @@ describe("Book Overview Component with mocked http responses", () => {
     // when
     const authorCell = await screen.findByText(/Julius Verne/i);
     const row = authorCell.closest("tr");
-    row && userEvent.click(row);
+    row && (await userEvent.click(row));
     //then
     expect(mockUseNavigate).toHaveBeenCalled();
     expect(mockUseNavigate).toHaveBeenCalledTimes(1);
