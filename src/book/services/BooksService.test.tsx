@@ -6,18 +6,18 @@ import { setupServer } from "msw/node";
 
 const mockedResponseBooks: Book[] = [
   {
-    id: 1,
+    id: "1",
     authors: "Julius Verne",
     title: "80 days around the world",
   },
   {
-    id: 2,
+    id: "2",
     authors: "Frank Herbert",
     title: "Dune",
   },
 ];
 
-const bookToSave = { id: 1, authors: "New author", title: "New title" };
+const bookToSave = { id: "1", authors: "New author", title: "New title" };
 const newBookToSave = { authors: "Some author", title: "Some title" };
 
 const server = setupServer(

@@ -8,7 +8,7 @@ const headers = {
 
 export interface BookService {
   findAll: () => Promise<Book[]>;
-  findOne: (id: number) => Promise<Book>;
+  findOne: (id: string) => Promise<Book>;
   save: (bookToSave: Book) => Promise<Book>;
   saveNew: (book: BookProperties) => Promise<Book>;
 }
