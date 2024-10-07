@@ -39,7 +39,7 @@ export const BookDetails = () => {
 
   useEffect(() => {
     if (id) {
-      findOne(+id).then((book) => {
+      findOne(id).then((book) => {
         reset(book);
         setLoading(false);
       });
@@ -54,7 +54,7 @@ export const BookDetails = () => {
   const notifyOnBookChange = (bookData: BookProperties) => {
     if (id) {
       //update book
-      save({ id: +id, ...bookData }).then(navigateToBookList);
+      save({ id, ...bookData }).then(navigateToBookList);
     } else {
       //create new book
       saveNew(bookData).then(navigateToBookList);
