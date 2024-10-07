@@ -21,12 +21,12 @@ export const BookOverview = () => {
   useEffect(() => {
     setBooks([
       {
-        id: 1,
+        id: "1",
         authors: "John Example",
         title: "Example Book",
       },
       {
-        id: 2,
+        id: "2",
         authors: "Joe Smith",
         title: "Another Book",
       },
