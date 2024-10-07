@@ -4,7 +4,7 @@ import { render, screen } from "@testing-library/react";
 
 describe("BookDetails", () => {
   const currentBook = {
-    id: 1,
+    id: "1",
     title: "Example Book",
     authors: "John Example",
   };
