@@ -4,7 +4,7 @@ import { Card, CardContent, Typography, FormLabel } from "@mui/material";
 
 export const BookDetails = () => {
   const initialBook = {
-    id: 1,
+    id: "1",
     title: "Example Book",
     authors: "John Example",
   };
