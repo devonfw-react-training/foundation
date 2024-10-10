@@ -1,4 +1,4 @@
-import React, { createContext, useContext, FC } from "react";
+import { createContext, useContext, FC } from "react";
 import { Book, BookProperties } from "../book";
 
 export const getURI = (endpoint: string) => `http://localhost:8000/${endpoint}`;
@@ -8,7 +8,7 @@ const headers = {
 
 export interface BookService {
   findAll: () => Promise<Book[]>;
-  findOne: (id: number) => Promise<Book>;
+  findOne: (id: string) => Promise<Book>;
   save: (bookToSave: Book) => Promise<Book>;
   saveNew: (book: BookProperties) => Promise<Book>;
 }

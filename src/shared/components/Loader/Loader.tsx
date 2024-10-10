@@ -1,5 +1,5 @@
 import { FunctionComponent } from "react";
-import { Spinner } from "../Sipnner/Spinner";
+import { Spinner } from "../Spinner/Spinner";
 
 interface LoaderProps {
   isLoading: boolean;

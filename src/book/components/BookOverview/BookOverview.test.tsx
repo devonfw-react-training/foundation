@@ -5,32 +5,36 @@ import { BookProvider, getURI } from "../../services/BooksService";
 import { Book } from "../../book";
 import userEvent from "@testing-library/user-event";
 import { BookDetails } from "../BookDetails/BookDetails";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 
 const mockedResponseBooks: Book[] = [
   {
-    id: 1,
+    id: "1",
     authors: "Julius Verne",
     title: "80 days around the world",
   },
   {
-    id: 2,
+    id: "2",
     authors: "Frank Herbert",
     title: "Dune",
   },
 ];
 
 const server = setupServer(
-  rest.get(getURI("books"), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(mockedResponseBooks));
+  http.get(getURI("books"), () => {
+    return HttpResponse.json(mockedResponseBooks);
   }),
-  rest.get(getURI(`books/${mockedResponseBooks[0].id}`), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(mockedResponseBooks[0]));
+  http.get(getURI(`books/${mockedResponseBooks[0].id}`), () => {
+    return HttpResponse.json(mockedResponseBooks[0]);
   }),
-  rest.put(getURI(`books/${mockedResponseBooks[0].id}`), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(req.body));
-  }),
+  http.put(
+    getURI(`books/${mockedResponseBooks[0].id}`),
+    async ({ request }) => {
+      const body = await request.json();
+      return HttpResponse.json(body);
+    },
+  ),
 );
 
 const WrapperComponent = ({ children }: any) => (
@@ -99,7 +103,7 @@ describe("Book Overview Component with mocked http responses", () => {
     // when
     const authorCell = await screen.findByText(/Julius Verne/i);
     const row = authorCell.closest("tr");
-    row && userEvent.click(row);
+    row && (await userEvent.click(row));
     // then
     expect(await screen.findByLabelText(/Authors/i)).toBeInTheDocument();
   });

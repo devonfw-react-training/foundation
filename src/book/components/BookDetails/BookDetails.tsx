@@ -38,7 +38,7 @@ export const BookDetails = () => {
 
   const fetchBook = async () => {
     if (id) {
-      await findOne(+id).then((book) => {
+      await findOne(id).then((book) => {
         reset(book);
       });
     } else {
@@ -53,7 +53,7 @@ export const BookDetails = () => {
   const notifyOnBookChange = (bookData: BookProperties) => {
     if (id) {
       //update book
-      save({ id: +id, ...bookData }).then(navigateToBookList);
+      save({ id, ...bookData }).then(navigateToBookList);
     } else {
       //create new book
       saveNew(bookData).then(navigateToBookList);
