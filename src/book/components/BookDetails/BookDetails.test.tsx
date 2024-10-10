@@ -6,12 +6,12 @@ import { vi } from "vitest";
 
 const mockedResponseBooks: Book[] = [
   {
-    id: 1,
+    id: "1",
     authors: "Julius Verne",
     title: "80 days around the world",
   },
   {
-    id: 2,
+    id: "2",
     authors: "Frank Herbert",
     title: "Dune",
   },

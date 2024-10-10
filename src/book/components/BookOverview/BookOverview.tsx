@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Book } from "../../book";
 import { BookDetails } from "../BookDetails/BookDetails";
 import { useBookService } from "../../services/BooksService";
 
 import {
-  Grid,
   TableContainer,
   Table,
   TableHead,
@@ -13,6 +12,7 @@ import {
   TableBody,
   Paper,
 } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 
 export interface Props {}
 
@@ -40,7 +40,7 @@ export const BookOverview = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item md={8}>
+      <Grid size={8}>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -69,7 +69,7 @@ export const BookOverview = () => {
           </Table>
         </TableContainer>
       </Grid>
-      <Grid item md={4}>
+      <Grid size={4}>
         {selectedBook && (
           <BookDetails onBookChange={updateBook} bookId={selectedBook.id} />
         )}

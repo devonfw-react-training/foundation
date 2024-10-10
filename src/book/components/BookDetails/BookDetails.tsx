@@ -4,7 +4,7 @@ import { Stack, Button, Card, CardContent, TextField } from "@mui/material";
 import { useBookService } from "../../services/BooksService";
 
 export interface Props {
-  bookId: number;
+  bookId: string;
   onBookChange: (book: Book) => void;
 }
 
