@@ -5,7 +5,7 @@ import { Box, AppBar, Typography, Tabs, Tab } from "@mui/material";
 export const Header = () => {
   const [currentTab, setCurrentTab] = useState("/book-app/books");
 
-  const handleChange = (event: React.SyntheticEvent, newTab: string) => {
+  const handleChange = (_event: React.SyntheticEvent, newTab: string) => {
     setCurrentTab(newTab);
   };
 
