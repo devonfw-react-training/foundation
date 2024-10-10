@@ -8,7 +8,7 @@ type ParamTypes = {
   id: string;
 };
 
-const initBook = { id: NaN, title: "", authors: "" };
+const initBook = { id: "", title: "", authors: "" };
 
 export const BookDetails = () => {
   const { save, saveNew, findOne } = useBookService();
@@ -18,7 +18,7 @@ export const BookDetails = () => {
 
   useEffect(() => {
     if (id) {
-      findOne(+id).then((book) => {
+      findOne(id).then((book) => {
         setBook(book);
       });
     } else {

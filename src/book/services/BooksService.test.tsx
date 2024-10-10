@@ -1,37 +1,37 @@
 import { renderHook } from "@testing-library/react";
 import { getURI, useBooks } from "./BooksService";
 import { Book } from "../book";
-import { rest } from "msw";
+import { http, HttpResponse } from "msw";
 import { setupServer } from "msw/node";
 
 const mockedResponseBooks: Book[] = [
   {
-    id: 1,
+    id: "1",
     authors: "Julius Verne",
     title: "80 days around the world",
   },
   {
-    id: 2,
+    id: "2",
     authors: "Frank Herbert",
     title: "Dune",
   },
 ];
 
-const bookToSave = { id: 1, authors: "New author", title: "New title" };
+const bookToSave = { id: "1", authors: "New author", title: "New title" };
 const newBookToSave = { authors: "Some author", title: "Some title" };
 
 const server = setupServer(
-  rest.get(getURI("books"), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(mockedResponseBooks));
+  http.get(getURI("books"), () => {
+    return HttpResponse.json(mockedResponseBooks);
   }),
-  rest.get(getURI(`books/${mockedResponseBooks[0].id}`), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(mockedResponseBooks[0]));
+  http.get(getURI(`books/${mockedResponseBooks[0].id}`), () => {
+    return HttpResponse.json(mockedResponseBooks[0]);
   }),
-  rest.put(getURI(`books/${bookToSave.id}`), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json(bookToSave));
+  http.put(getURI(`books/${bookToSave.id}`), () => {
+    return HttpResponse.json(bookToSave);
   }),
-  rest.post(getURI("books"), (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ ...newBookToSave, id: 3 }));
+  http.post(getURI("books"), () => {
+    return HttpResponse.json({ ...newBookToSave, id: 3 });
   }),
 );
 

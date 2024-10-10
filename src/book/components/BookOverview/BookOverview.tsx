@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { Book } from "../../book";
 import { useBookService } from "../../services/BooksService";
 import {
-  Grid,
   TableContainer,
   Table,
   TableHead,
@@ -12,6 +11,7 @@ import {
   TableBody,
   Paper,
 } from "@mui/material";
+import Grid from "@mui/material/Grid2";
 
 export interface Props {}
 
@@ -26,7 +26,7 @@ export const BookOverview = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item md={12}>
+      <Grid size={12}>
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
