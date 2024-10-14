@@ -22,4 +22,8 @@
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 00-start
