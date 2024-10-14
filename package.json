@@ -1,6 +1,6 @@
 {
-  "name": "foundations-2021",
-  "version": "0.1.0",
+  "name": "foundations-react",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
